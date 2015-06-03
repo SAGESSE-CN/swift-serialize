@@ -83,6 +83,14 @@ class T2 : NSObject {
     }
 }
 
+class T4 : NSObject {
+    var i : Int = 0
+    var f : Float = 0
+    var s : String = ""
+    var oi : Int?
+    var of : Float?
+    var os : String?
+}
 
 class SFSerializeTests: XCTestCase {
     
@@ -96,10 +104,35 @@ class SFSerializeTests: XCTestCase {
         super.tearDown()
     }
     
+    func testSerialize() {
+        
+        var t = T4()
+        
+        t.i = 2233
+        t.f = 22.33
+        t.s = "2233"
+        t.oi = 2233
+        t.of = 22.33
+        t.os = "2233"
+        //t1.t_stoi = 22
+        
+        if let json = serialize(t) as? NSDictionary {
+            
+             XCTAssert(json["i"] as? Int == 2233)
+             XCTAssert(json["f"] as? Float == 22.33)
+             XCTAssert(json["s"] as? String == "2233")
+             XCTAssert(json["oi"] as? Int == 2233)
+             XCTAssert(json["of"] as? Float == 22.33)
+             XCTAssert(json["os"] as? String == "2233")
+            
+        }
+    }
+    
     func testUnserialize() {
         for bundle in NSBundle.allBundles() {
             if let path = bundle.pathForResource("test", ofType: "json") {
-                if var s : T1 = unserialize(jsonPath: path) {
+                if var s: T1 = unserialize(jsonData: NSData(contentsOfFile: path)) {
+                    
                     
                     // 检查
                     XCTAssert(s.t_stoi == 22)
