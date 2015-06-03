@@ -35,7 +35,7 @@ class T1 : NSObject
     @objc var t_atos: String = ""
     @objc var t_dtos: String = ""
     @objc var t_ntos: String = ""
-        
+    
     @objc var t_stoos: String?
     @objc var t_ftoos: String?
     @objc var t_btoos: String?
@@ -90,6 +90,12 @@ class T4 : NSObject {
     var oi : Int?
     var of : Float?
     var os : String?
+    var a : [String] = []
+    var oa : [Int]?
+    var t3 : T2.T3?
+    var d : [Int:Int] = [:]
+    var od : [Int:Int]?
+    var odn : [Int:Int]?
 }
 
 class SFSerializeTests: XCTestCase {
@@ -107,6 +113,9 @@ class SFSerializeTests: XCTestCase {
     func testSerialize() {
         
         var t = T4()
+        var t3 = T2.T3()
+        
+        t3.t_m = "333"
         
         t.i = 2233
         t.f = 22.33
@@ -114,17 +123,52 @@ class SFSerializeTests: XCTestCase {
         t.oi = 2233
         t.of = 22.33
         t.os = "2233"
-        //t1.t_stoi = 22
+        t.a = ["1","2","3"]
+        t.oa = [1,2,3]
+        t.d = [1:2,3:4,5:6,7:8]
+        t.od = [1:2,3:4,5:6,7:8]
+        t.t3 = t3
         
         if let json = serialize(t) as? NSDictionary {
             
-             XCTAssert(json["i"] as? Int == 2233)
-             XCTAssert(json["f"] as? Float == 22.33)
-             XCTAssert(json["s"] as? String == "2233")
-             XCTAssert(json["oi"] as? Int == 2233)
-             XCTAssert(json["of"] as? Float == 22.33)
-             XCTAssert(json["os"] as? String == "2233")
+            XCTAssert(json["i"] as? Int == 2233)
+            XCTAssert(json["f"] as? Float == 22.33)
+            XCTAssert(json["s"] as? String == "2233")
+            XCTAssert(json["oi"] as? Int == 2233)
+            XCTAssert(json["of"] as? Float == 22.33)
+            XCTAssert(json["os"] as? String == "2233")
+            XCTAssert(json["a"] as? Array<String> != nil)
+            XCTAssert(json["a"]?.count == 3)
+            XCTAssert(json["oa"] as? Array<Int> != nil)
+            XCTAssert(json["oa"]?.count == 3)
+            XCTAssert(json["t3"] != nil)
+            XCTAssert((json["t3"] as? NSDictionary)?["t_m"] != nil)
+            XCTAssert(json["d"] != nil)
+            XCTAssert(json["od"] != nil)
+            XCTAssert(json["d"]?.count == 4)
+            XCTAssert(json["od"]?.count == 4)
+            XCTAssert(json["odn"] == nil)
             
+            // 测试反序列化
+            if var tt: T4 = unserialize(json: json) {
+                
+                XCTAssert(tt.i == 2233)
+                XCTAssert(tt.f == 22.33)
+                XCTAssert(tt.s == "2233")
+                XCTAssert(tt.oi == nil) // 无法反序列化, 没有kvc
+                XCTAssert(tt.of == nil) // 无法反序列化, 没有kvc
+                XCTAssert(tt.os == "2233")
+                XCTAssert(tt.a.count == 3)
+                XCTAssert(tt.oa != nil)
+                XCTAssert(tt.oa?.count == 3)
+                XCTAssert(tt.t3 != nil)
+                XCTAssert(tt.t3?.t_m == "333")
+                XCTAssert(tt.d.count == 4)
+                XCTAssert(tt.od != nil)
+                XCTAssert(tt.od?.count == 4)
+                XCTAssert(tt.odn == nil)
+                
+            }
         }
     }
     
@@ -132,7 +176,6 @@ class SFSerializeTests: XCTestCase {
         for bundle in NSBundle.allBundles() {
             if let path = bundle.pathForResource("test", ofType: "json") {
                 if var s: T1 = unserialize(jsonData: NSData(contentsOfFile: path)) {
-                    
                     
                     // 检查
                     XCTAssert(s.t_stoi == 22)
@@ -210,12 +253,4 @@ class SFSerializeTests: XCTestCase {
         
         XCTAssert(false, "not found test.json")
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
 }

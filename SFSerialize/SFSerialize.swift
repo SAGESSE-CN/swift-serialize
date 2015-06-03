@@ -295,20 +295,17 @@ private func _sf_serialize(src: AnyObject) -> AnyObject? {
         
         // 遍历
         for (smn, sm) in or {
-            // TODO: bug...
-//            class A {
-//                var a : Int?
-//            }
-//            var a = A()
-//            a.a = 2233
-//            let m = reflect(a)
-//            for i in 0 ..< m.count {
-//                let m2 = reflect(m[i].1.value)
-//                for i in 0 ..< m2.count {
-//                    println(m2[i].1.value)
-//                }
-//            }
-            if let v: AnyObject = sm.value as? AnyObject {
+          
+            // ...
+            var value = sm.value
+            
+            // 如果是可选类型. 解包.
+            if sm.disposition == .Optional {
+                value = _sf_unwarp(sm.value)
+            }
+            
+            // 偿试转换
+            if let v: AnyObject = value as? AnyObject {
                 if let v: AnyObject = _sf_serialize(v) {
                     rs[smn] = v
                 }
@@ -713,6 +710,18 @@ private func _sf_reflect(ob: Any) -> [(String, MirrorType)] {
     }
     
     return rs
+}
+
+///
+/// 如果是Optional解包.
+///
+private func _sf_unwarp(v:Any) -> Any {
+    
+    var mt = reflect(v)
+    while mt.count != 0 && mt.disposition == .Optional {
+        mt = mt[0].1
+    }
+    return mt.value
 }
 
 ///
