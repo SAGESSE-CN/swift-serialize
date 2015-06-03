@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C0BA0291B1EC4E3008A5570 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 0C0BA0281B1EC4E3008A5570 /* test.json */; };
 		0C4B98E61B1D67FC00E470AB /* SFSerialize.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C4B98E51B1D67FC00E470AB /* SFSerialize.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0C4B98EC1B1D67FC00E470AB /* SFSerialize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C4B98E01B1D67FC00E470AB /* SFSerialize.framework */; };
 		0C4B98F31B1D67FC00E470AB /* SFSerializeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4B98F21B1D67FC00E470AB /* SFSerializeTests.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C0BA0281B1EC4E3008A5570 /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		0C4B98E01B1D67FC00E470AB /* SFSerialize.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SFSerialize.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C4B98E41B1D67FC00E470AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0C4B98E51B1D67FC00E470AB /* SFSerialize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SFSerialize.h; sourceTree = "<group>"; };
@@ -74,8 +76,8 @@
 			isa = PBXGroup;
 			children = (
 				0C4B98E51B1D67FC00E470AB /* SFSerialize.h */,
-				0C4B98E31B1D67FC00E470AB /* Supporting Files */,
 				0C950F951B1E098D00B6E2C8 /* SFSerialize.swift */,
+				0C4B98E31B1D67FC00E470AB /* Supporting Files */,
 			);
 			path = SFSerialize;
 			sourceTree = "<group>";
@@ -91,6 +93,7 @@
 		0C4B98EF1B1D67FC00E470AB /* SFSerializeTests */ = {
 			isa = PBXGroup;
 			children = (
+				0C0BA0281B1EC4E3008A5570 /* test.json */,
 				0C4B98F21B1D67FC00E470AB /* SFSerializeTests.swift */,
 				0C4B98F01B1D67FC00E470AB /* Supporting Files */,
 			);
@@ -202,6 +205,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C0BA0291B1EC4E3008A5570 /* test.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +276,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -314,7 +318,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

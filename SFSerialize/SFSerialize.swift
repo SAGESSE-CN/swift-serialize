@@ -9,15 +9,21 @@ import UIKit
 
 // Class                支持, 自动推断类型
 // Aggregate            支持, 自动推断元素
-// IndexContainer       支持, 自动推断元素 + 代理
-// KeyContainer         支持, 自动推断KV类型 + 代理 
+// IndexContainer       支持, 自动推断元素 
+// KeyContainer         支持, 自动推断KV类型
 // ObjCObject           支持, 自动推断类型
-// Optional             部分支持(@objc导出), 自动推断V类型 + 代理 
+// Optional             部分支持(@objc导出), 自动推断V类型 
 // Enum                 部分支持(@objc导出)
 // Struct               不支持, 原因: 无KVC
 // Tuple                不支持, 原因: 无KVC
 // Container            不支持, 原因: 未知类型
 // MembershipContainer  不支持, 原因: 未知类型
+
+extension Array {
+    
+}
+
+
 
 ///
 /// 反序列化(普通)
@@ -113,7 +119,10 @@ private func _sf_reflect(ob:Any) -> [(String, MirrorType)] {
 /// MARK: - /// convert
 
 ///
-/// swift类型=>oc类型
+/// 转换swift类型为oc类型
+///
+/// :param: type swift类型
+/// :returns: 如果转换失败, 值为nil
 ///
 private func _sf_convertOfType(type: Any.Type!) -> NSObject.Type? {
     
@@ -204,8 +213,10 @@ private func _sf_convertOfValue(src:AnyObject, dstType: Any.Type) -> AnyObject? 
 ///
 private func _sf_convertOfString(src:AnyObject) -> NSString? {
     if let s = src as? NSString {
+        // String and NSString
         return s
     } else if let n = src as? NSNumber {
+        // Int/UInt/Float/Double/CGFloat/Bool 
         return n.stringValue
     } else {
         return nil
@@ -213,12 +224,17 @@ private func _sf_convertOfString(src:AnyObject) -> NSString? {
 }
 
 ///
-/// 强制转换为number
+/// 转换为number, 对于String偿试将转换
+///
+/// :param: src 源
+/// :returns: 如果为nil, 转换失败
 ///
 private func _sf_convertOfNumber(src:AnyObject) -> NSNumber? {
     if let n = src as? NSNumber {
+        // Int/UInt/Float/Double/CGFloat/Bool 
         return n
     } else if let s = src as? NSString {
+        // String and NSString
         let sc = NSScanner(string: s as! String)
         var n:Double = 0
         if sc.scanDouble(&n) {
@@ -230,9 +246,94 @@ private func _sf_convertOfNumber(src:AnyObject) -> NSNumber? {
     }
 }
 
+/// MARK: - /// serialize of json
+
+///
+/// 序列化对象为json
+///
+private func _sf_serialize(src: AnyObject) -> AnyObject? {
+  
+    // oc类型
+    if let ob = src as? NSObject {
+        
+        
+        
+    }
+        
+    //(src.dynamicType)
+    
+    
+//        // 如果基础类型, 直接转换
+//        if self is NSNull || self is NSString || self is NSNumber {
+//            return self
+//        }
+//        
+//        // 如果是数组
+//        if let sa = self as? NSArray {
+//            var rs = NSMutableArray()
+//            for v in sa {
+//                // 只处理NSObject
+//                if let ob = v as? NSObject {
+//                    if let dsto: AnyObject = ob.serialize() {
+//                        rs.addObject(dsto)
+//                    }
+//                }
+//                // 其他, 兼容类型?
+//            }
+//            return rs
+//        }
+//        
+//        // 如果是字典
+//        if let dic = self as? NSDictionary {
+//            var rs = NSMutableDictionary()
+//            for (k, v) in dic {
+//                // 只能处理字符串的key
+//                if let tk = k as? NSString {
+//                    // 只处理NSObject
+//                    if let ob = v as? NSObject {
+//                        // ok?
+//                        if let dsto: AnyObject = ob.serialize() {
+//                            rs[tk] = dsto
+//                        }
+//                    }
+//                    // 其他, 兼容类型?
+//                }
+//            }
+//            return rs
+//        }
+//        
+//        // 如果上面的都不是. 那只能是自定义类型了, 进行反射
+//        var or = self.reflect2()
+//        var rs = NSMutableDictionary()
+//        
+//        // 遍历
+//        for (smn, sm) in or {
+//            // 只处理NSObject
+//            if let o = sm.value as? NSObject {
+//                // ok?
+//                if let dsto: AnyObject = o.serialize() {
+//                    rs[smn] = dsto
+//                }
+//            }
+//            // 其他, 兼容类型?
+//        }
+//        
+//        // ok
+//        return rs
+    
+    return nil
+}
 
 /// MARK: - /// unserialize of json
 
+///
+/// 反向序列化为指定类型
+///
+/// :param: src     反序列化后的json
+/// :param: dstType 指定的类型
+///
+/// :returns: 如果为nil, 反序列化失败
+///
 private func _sf_unserialize(src: AnyObject!, dstType: Any.Type) -> AnyObject? {
   
     // 检查参数
@@ -298,21 +399,11 @@ private func _sf_unserialize(src: AnyObject!, dstType: Any.Type) -> AnyObject? {
             
             let val = (src as! NSDictionary)[n] as? NSObject
             // 如果没有这个键, 或者是null, 忽略
-            if (val == nil || val!.isKindOfClass(NSNull.self)) {
+            // 或者不支持kvc
+            if (val == nil || val!.isKindOfClass(NSNull.self) || !o.respondsToSelector(Selector(n))) {
                 continue
             }
 
-            // Class                支持, 自动推断类型
-            // Aggregate            支持, 自动推断元素
-            // IndexContainer       支持, 自动推断元素 + 代理
-            // KeyContainer         支持, 自动推断KV类型 + 代理 
-            // ObjCObject           支持, 自动推断类型
-            // Optional             部分支持(@objc导出), 自动推断V类型 + 代理 
-            // Enum                 部分支持(@objc导出)
-            // Struct               不支持, 原因: 无KVC
-            // Tuple                不支持, 原因: 无KVC
-            // Container            不支持, 原因: 未知类型
-            // MembershipContainer  不支持, 原因: 未知类型
             switch sm.disposition {
                 
             case .Class: // 自定义类
@@ -326,8 +417,8 @@ private func _sf_unserialize(src: AnyObject!, dstType: Any.Type) -> AnyObject? {
                 
                 // 数组/字典, 都转换不了
                 // 其他的可以由底层库直接转换
-                if !(val is NSArray) && !(val is NSDictionary) {
-                    o.setValue(val, forKey: n)
+                if let v: AnyObject = _sf_convertOfValue(val!, sm.valueType) {
+                    o.setValue(v, forKey: n)
                 }
                 
             case .IndexContainer: // 数组
@@ -414,7 +505,12 @@ private func _sf_unserialize(src: AnyObject!, dstType: Any.Type) -> AnyObject? {
 }
 
 ///
-/// 反序列化(对象)
+/// 反向序列化为指定类型
+///
+/// :param: src         反序列化后的json
+/// :param: dstTypeName 指定的类型的信息(包含元素、键值类型)
+///
+/// :returns: 如果为nil, 反序列化失败
 ///
 private func _sf_unserialize(src: AnyObject!, dstTypeName: String) -> AnyObject? {
     
@@ -503,7 +599,12 @@ private func _sf_unserialize(src: AnyObject!, dstTypeName: String) -> AnyObject?
 }
 
 ///
-/// 反序列化(数组)
+/// 反向序列化为指定类型的数组
+///
+/// :param: src         反序列化后的json
+/// :param: dstTypeName 指定的元素类型的信息
+///
+/// :returns: 如果为nil, 反序列化失败
 ///
 private func _sf_unserializeOfArray(src: AnyObject!, elementTypeName: String) -> AnyObject? {
     
@@ -524,7 +625,12 @@ private func _sf_unserializeOfArray(src: AnyObject!, elementTypeName: String) ->
 }
 
 ///
-/// 反序列化(字典)
+/// 反向序列化为指定类型的字典
+///
+/// :param: src         反序列化后的json
+/// :param: dstTypeName 指定的键值类型的信息
+///
+/// :returns: 如果为nil, 反序列化失败
 ///
 private func _sf_unserializeOfDictionary(src: AnyObject, keyTypeName: String, valueTypeName: String) -> AnyObject? {
     
@@ -552,7 +658,7 @@ private func _sf_unserializeOfDictionary(src: AnyObject, keyTypeName: String, va
 
 /// MARK: - /// util
 
-//好像不需要呢.
+// 好像不需要呢.
 //extension NSObject {
 //    
 //    ///

@@ -7,39 +7,34 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>547949E4-D84D-4677-AEE8-58B90FBF4EF6</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>SFSerialize</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>a204deea-60c6-11e4-912e-5736e9ec8251++505</key>
-		<string>svn://114.215.139.138/duomi.dj2/trunk</string>
+		<key>97820BC5D4698BF9EEA1B60A6097223724FD2C0C</key>
+		<string>https://github.com/sagesse-cn/SFSerialize.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>SFSerialize/SFSerialize.xcodeproj/project.xcworkspace</string>
+	<string>SFSerialize.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>a204deea-60c6-11e4-912e-5736e9ec8251++505</key>
-		<string>../../..</string>
-	</dict>
-	<key>IDESourceControlProjectRepositoryRootDictionary</key>
-	<dict>
-		<key>a204deea-60c6-11e4-912e-5736e9ec8251++505</key>
-		<string>svn://114.215.139.138/duomi.dj2</string>
+		<key>97820BC5D4698BF9EEA1B60A6097223724FD2C0C</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>svn://114.215.139.138/duomi.dj2/trunk/SFSerialize/SFSerialize.xcodeproj/project.xcworkspace</string>
+	<string>https://github.com/sagesse-cn/SFSerialize.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>a204deea-60c6-11e4-912e-5736e9ec8251++505</string>
+	<string>97820BC5D4698BF9EEA1B60A6097223724FD2C0C</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.subversion</string>
+			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>a204deea-60c6-11e4-912e-5736e9ec8251++505</string>
+			<string>97820BC5D4698BF9EEA1B60A6097223724FD2C0C</string>
 			<key>IDESourceControlWCCName</key>
-			<string>duomi.dj2</string>
+			<string>SFSerialize</string>
 		</dict>
 	</array>
 </dict>

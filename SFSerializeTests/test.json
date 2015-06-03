@@ -1,0 +1,70 @@
+{
+    "t_stoi" : "22.33"  ,
+    "t_ftoi" :  22.33   ,
+    "t_btoi" :  true    ,
+    "t_atoi" : [22,33]  ,
+    "t_dtoi" : {"2":2}  ,
+    "t_ntoi" :  null    ,
+    
+    "t_oooi" :  22.33   ,
+    
+    "t_stob" : "22.33"  ,
+    "t_ftob" :  22.33   ,
+    "t_btob" :  true    ,
+    "t_atob" : [22,33]  ,
+    "t_dtob" : {"2":2}  ,
+    "t_ntob" :  null    ,
+    
+    "t_ooob" :  22.33   ,
+    
+    "t_stos" : "22.33"  ,
+    "t_ftos" :  22.33   ,
+    "t_btos" :  true    ,
+    "t_atos" : [22,33]  ,
+    "t_dtos" : {"2":2}  ,
+    "t_ntos" :  null    ,
+    
+    "t_stoos" : "22.33"  ,
+    "t_ftoos" :  22.33   ,
+    "t_btoos" :  true    ,
+    "t_atoos" : [22,33]  ,
+    "t_dtoos" : {"2":2}  ,
+    "t_ntoos" :  null    ,
+    
+    "t_stoa" : "22.33"  ,
+    "t_ftoa" :  22.33   ,
+    "t_btoa" :  true    ,
+    "t_atoa" : [22,33]  ,
+    "t_dtoa" : {"2":2}  ,
+    "t_ntoa" :  null    ,
+    
+    "t_stooa" : "22.33"  ,
+    "t_ftooa" :  22.33   ,
+    "t_btooa" :  true    ,
+    "t_atooa" : [22,33]  ,
+    "t_dtooa" : {"2":2}  ,
+    "t_ntooa" :  null    ,
+    
+    "t_stod" : "22.33"  ,
+    "t_ftod" :  22.33   ,
+    "t_btod" :  true    ,
+    "t_atod" : [22,33]  ,
+    "t_dtod" : {"2":2}  ,
+    "t_ntod" :  null    ,
+    
+    "t_stood" : "22.33"  ,
+    "t_ftood" :  22.33   ,
+    "t_btood" :  true    ,
+    "t_atood" : [22,33]  ,
+    "t_dtood" : {"2":2}  ,
+    "t_ntood" :  null    ,
+    
+    "t_dtot2" : {
+        "t_m":22.33
+    },
+    "t_dtot3" : {
+        "t_m":22.33
+    },
+    
+    "t_end" : 0
+}
