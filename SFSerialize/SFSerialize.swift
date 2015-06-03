@@ -48,12 +48,32 @@ public func serializeToData(o: AnyObject) -> NSData? {
 /// 反序列化
 ///
 /// :param: jsonData json的原始数据
-/// :returns: nil表示转换失败
+/// :returns: 如果返回nil, 反序列化失败
 ///
 public func unserialize<T>(#jsonData: NSData?) -> T? {
+    return unserialize(jsonData: jsonData, type: T.self) as? T
+}
+
+///
+/// 反序列化
+///
+/// :param: json json数据 
+/// :returns: 如果返回nil, 反序列化失败
+///
+public func unserialize<T>(#json: AnyObject?) -> T? {
+    return unserialize(json: json, type: T.self) as? T
+}
+
+///
+/// 反序列化
+///
+/// :param: jsonData json的原始数据
+/// :returns: 如果返回nil, 反序列化失败
+///
+public func unserialize(#jsonData: NSData?, #type: Any.Type) -> AnyObject? {
     
     if let jsonData = jsonData {
-        return unserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
+        return unserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil), type: type)
     }
     return nil
 }
@@ -62,12 +82,12 @@ public func unserialize<T>(#jsonData: NSData?) -> T? {
 /// 反序列化
 ///
 /// :param: json json数据 
-/// :returns: nil表示转换失败
+/// :returns: 如果返回nil, 反序列化失败
 ///
-public func unserialize<T>(#json: AnyObject?) -> T? {
+public func unserialize(#json: AnyObject?, #type: Any.Type) -> AnyObject? {
     
     if let json: AnyObject = json {
-        return _sf_unserialize(json, T.self) as? T
+        return _sf_unserialize(json, type)
     }
     return nil
 }
@@ -105,6 +125,7 @@ public extension NSObject {
         return nil
     }
 }
+
 
 
 /// MARK: - /// convert
