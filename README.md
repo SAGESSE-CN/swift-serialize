@@ -1,2 +1,3 @@
 # SFSerialize
-A swift class serialize to/from json library
+Swift object serialization to json
+Swift object unserialization from json
