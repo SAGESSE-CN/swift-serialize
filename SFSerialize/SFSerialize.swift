@@ -522,7 +522,7 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
     if (dstTypeName.hasPrefix("Swift.Array")
         || dstTypeName.hasPrefix("Swift.Optional")
         || dstTypeName.hasPrefix("Swift.Dictionary")) {
-            _sf_unserialize(src, dstTypeName)
+            return _sf_unserialize(src, dstTypeName)
     }
     
     return nil

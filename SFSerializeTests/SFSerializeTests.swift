@@ -110,6 +110,12 @@ class SFSerializeTests: XCTestCase {
         super.tearDown()
     }
     
+    func testA() {
+        let s: Dictionary<String, Int>? = unserialize(json: ["ss":"22"])
+        
+        XCTAssert(s != nil)
+    }
+    
     func testSerialize() {
         
         var t = T4()
