@@ -126,7 +126,178 @@ public extension NSObject {
     }
 }
 
+///
+/// 提供转换(只有直接使用源文件的情况下才可以使用)
+///
+internal extension NSObject {
+    ///
+    /// 序列化
+    ///
+    /// :returns: 如果返回nil, 序列化失败
+    ///
+    func serialize() -> AnyObject? {
+        return _sf_serialize(self)
+    }
 
+    ///
+    /// 序列化
+    ///
+    /// :returns: 如果返回nil, 序列化失败
+    ///
+    func serializeToData() -> NSData? {
+        
+        if let json: AnyObject = serialize() {
+            return NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.allZeros, error: nil)
+        }
+        return nil
+    }
+    
+    ///
+    /// 反序列化
+    ///
+    /// :param: jsonData json的原始数据
+    /// :returns: 如果返回nil, 反序列化失败
+    ///
+    static func unserialize(#jsonData: NSData?) -> NSObject? {
+        
+        if let jsonData = jsonData {
+            return unserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
+        }
+        return nil
+    }
+    
+    ///
+    /// 反序列化
+    ///
+    /// :param: json json数据 
+    /// :returns: 如果返回nil, 反序列化失败
+    ///
+    static func unserialize(#json: AnyObject?) -> NSObject? {
+        
+        if let json: AnyObject = json {
+            return _sf_unserialize(json, self) as? NSObject
+        }
+        return nil
+    }
+}
+
+///
+/// 提供转换(只有直接使用源文件的情况下才可以使用)
+///
+internal extension Array {
+    ///
+    /// 序列化
+    ///
+    /// :returns: 如果返回nil, 序列化失败
+    ///
+    func serialize() -> AnyObject? {
+        
+        if let o: AnyObject = self as? AnyObject {
+            return _sf_serialize(o)
+        }
+        return nil
+    }
+    
+    ///
+    /// 序列化
+    ///
+    /// :returns: 如果返回nil, 序列化失败
+    ///
+    func serializeToData(o: AnyObject) -> NSData? {
+        
+        if let json: AnyObject = serialize() {
+            return NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.allZeros, error: nil)
+        }
+        return nil
+    }
+    
+    ///
+    /// 反序列化
+    ///
+    /// :param: jsonData json的原始数据
+    /// :returns: 如果返回nil, 反序列化失败
+    ///
+    static func unserialize(#jsonData: NSData?) -> Array<T>? {
+        
+        if let jsonData = jsonData {
+            return unserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
+        }
+        return nil
+    }
+    
+    ///
+    /// 反序列化
+    ///
+    /// :param: json json数据 
+    /// :returns: 如果返回nil, 反序列化失败
+    ///
+    static func unserialize(#json: AnyObject?) -> Array<T>? {
+        
+        if let json: AnyObject = json {
+            return _sf_unserialize(json, self) as? Array<T>
+        }
+        return nil
+    }
+}
+
+///
+/// 提供转换(只有直接使用源文件的情况下才可以使用)
+///
+internal extension Dictionary {
+    ///
+    /// 序列化
+    ///
+    /// :returns: 如果返回nil, 序列化失败
+    ///
+    func serialize() -> AnyObject? {
+        
+        if let o: AnyObject = self as? AnyObject {
+            return _sf_serialize(o)
+        }
+        return nil
+    }
+    
+    ///
+    /// 序列化
+    ///
+    /// :returns: 如果返回nil, 序列化失败
+    ///
+    func serializeToData() -> NSData? {
+        
+        if let json: AnyObject = serialize() {
+            return NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.allZeros, error: nil)
+        }
+        return nil
+    }
+    
+    ///
+    /// 反序列化
+    ///
+    /// :param: jsonData json的原始数据
+    /// :returns: 如果返回nil, 反序列化失败
+    ///
+    static func unserialize(#jsonData: NSData?) -> Dictionary<Key, Value>? {
+        
+        if let jsonData = jsonData {
+            return unserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
+        }
+        return nil
+    }
+    
+    ///
+    /// 反序列化
+    ///
+    /// :param: json json数据 
+    /// :returns: 如果返回nil, 反序列化失败
+    ///
+    static func unserialize(#json: AnyObject?) -> Dictionary<Key, Value>? {
+        
+        if let json: AnyObject = json {
+            return _sf_unserialize(json, self) as? Dictionary<Key, Value>
+        }
+        return nil
+    }
+}
 
 /// MARK: - /// convert
 

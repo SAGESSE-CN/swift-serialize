@@ -30,4 +30,10 @@ let data: NSData? = serializeToData(object)
 // The NSObject and subclass, suggest add `@objc` check, Sample refer SFSerializeTests
 let object: Type = unserialize(json: json)
 let object: AnyObject = unserialize(json: json, type: Type.self)
+
+
+// If you use the source file directly
+// There are also some extended operation 
+let json = object.serialize
+let object = Type.unserialize(json: json)
 ```
