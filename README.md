@@ -1,10 +1,10 @@
 # SFSerialize
 swift object serialization/unserialization of json 
 
-## Serialize Support ##
+#### Serialize Support
 AnyObject
 
-## Unserialize Support ##
+#### Unserialize Support
 Type | Description
 ---- | ---------
 **Class**|Support, automatic inference type
@@ -19,7 +19,7 @@ Type | Description
 **Container**|Unsupport, reason: Unknown
 **MembershipContainer**|Unsupport, reason: Unknown
 
-## Usage ##
+## Usage
 ```swift
 // serialize.
 let json: AnyObject? = serialize(object)
