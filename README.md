@@ -1,4 +1,4 @@
-# SFSerialize
+# SFSerialize [![Build Status](https://travis-ci.org/sagesse-cn/swift-serialize.svg?branch=master)](https://travis-ci.org/sagesse-cn/swift-serialize)
 swift object serialization/unserialization of json 
 
 #### Serialize Support
