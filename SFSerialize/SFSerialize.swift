@@ -372,7 +372,6 @@ private func _sf_convertOfNumber(src: AnyObject) -> NSNumber? {
 /// 序列化对象为json
 ///
 /// :param: src     需要序列化的对象
-///
 /// :returns: 如果为nil, 序列化失败
 ///
 private func _sf_serialize(src: AnyObject) -> AnyObject? {
@@ -589,9 +588,8 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
                 
                 // NSNumber的情况只能在这里处理
                 if sm.valueType is NSNumber.Type {
-                    // 数组/字典, 都转换不了
-                    if !(val is NSArray) && !(val is NSDictionary) {
-                        o.setValue(val, forKey: n)
+                    if let v = _sf_convertOfNumber(val!) {
+                        o.setValue(v, forKey: n)
                     }
                 } else {
                     // 还有没有测试过的
@@ -619,10 +617,8 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
     let dstTypeName = "\(dstType)"
     
     // 如果有数组/字典/可选
-    if (dstTypeName.hasPrefix("Swift.Array")
-        || dstTypeName.hasPrefix("Swift.Optional")
-        || dstTypeName.hasPrefix("Swift.Dictionary")) {
-            return _sf_unserialize(src, dstTypeName)
+    if _sf_isContainer(dstTypeName) {
+        return _sf_unserialize(src, dstTypeName)
     }
     
     return nil
@@ -733,21 +729,20 @@ private func _sf_unserializeOfArray(src: AnyObject, elementTypeName: String) -> 
         var rs = Array<AnyObject>()
         var type: Any.Type?
         
-        // 如果不是数组/字典/可选, 偿试直接获取到类型
-        if (!elementTypeName.hasPrefix("Swift.Array")
-            && !elementTypeName.hasPrefix("Swift.Optional")
-            && !elementTypeName.hasPrefix("Swift.Dictionary")) {
-                type = _sf_class(name: elementTypeName)
+        // !!这将会加载效率
+        // 如果不是容器, 偿试直接获取到类型
+        if !_sf_isContainer(elementTypeName) {
+            type = _sf_class(name: elementTypeName)
         }
         
         for o in arr {
             if let type = type {
-                // 可能还需要再次解释
+                // 成功的获取的到了元素的真实类型, 直接使用Type获取
                 if let s: AnyObject = _sf_unserialize(o, type) {
                     rs.append(s)
                 }
             } else {
-                // 可能还需要再次解释
+                // 没有获取到元素的真实类型, 继续使用名字访问
                 if let s: AnyObject = _sf_unserialize(o, elementTypeName) {
                     rs.append(s)
                 }
@@ -778,10 +773,9 @@ private func _sf_unserializeOfDictionary(src: AnyObject, keyTypeName: String, va
             var rs = Dictionary<NSObject, AnyObject>(minimumCapacity: dic.count)
             var type: Any.Type?
             
-            // 如果不是数组/字典/可选, 偿试直接获取到类型
-            if (!valueTypeName.hasPrefix("Swift.Array")
-                && !valueTypeName.hasPrefix("Swift.Optional")
-                && !valueTypeName.hasPrefix("Swift.Dictionary")) {
+            // !!这将会加载效率
+            // 如果不是容器, 偿试直接获取到类型
+            if !_sf_isContainer(valueTypeName) {
                 type = _sf_class(name: valueTypeName)
             }
             
@@ -789,12 +783,12 @@ private func _sf_unserializeOfDictionary(src: AnyObject, keyTypeName: String, va
                 // 转换为对应的值
                 if let k = _sf_convertOfValue(k, kt) as? NSObject {
                     if let type = type {
-                        // 继续处理. 不能直接识别的类型
+                        // 成功的获取的到了值的真实类型, 直接使用Type获取
                         if let v: AnyObject = _sf_unserialize(v, type) {
                             rs[k] = v
                         }
                     } else {
-                        // 继续处理. 不能直接识别的类型
+                        // 没有获取到值的真实类型, 继续使用名字访问
                         if let v: AnyObject = _sf_unserialize(v, valueTypeName) {
                             rs[k] = v
                         }
@@ -868,7 +862,7 @@ private func _sf_reflect(ob: Any) -> [(String, MirrorType)] {
 }
 
 ///
-/// 如果是Optional解包.
+/// 如果是Optional解包(解一个或多个). 如果是None忽略
 ///
 private func _sf_unwarp(v:Any) -> Any {
     
@@ -877,6 +871,20 @@ private func _sf_unwarp(v:Any) -> Any {
         mt = mt[0].1
     }
     return mt.value
+}
+
+///
+/// 检查一个类型是否是容器
+///
+private func _sf_isContainer(typeName:String) -> Bool {
+    
+    // NOTE: 小心添加选项, 否则会造成归递
+    if (typeName.hasPrefix("Swift.Array")
+        || typeName.hasPrefix("Swift.Optional")
+        || typeName.hasPrefix("Swift.Dictionary")) {
+            return true
+    }
+    return false
 }
 
 ///
