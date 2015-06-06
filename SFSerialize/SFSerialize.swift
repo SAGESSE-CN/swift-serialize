@@ -127,7 +127,7 @@ public extension NSObject {
 }
 
 ///
-/// 提供转换(只有直接使用源文件的情况下才可以使用)
+/// 提供转换
 ///
 internal extension NSObject {
     
@@ -161,7 +161,7 @@ internal extension NSObject {
 }
 
 ///
-/// 提供转换(只有直接使用源文件的情况下才可以使用)
+/// 提供转换
 ///
 internal extension Array {
     
@@ -195,7 +195,7 @@ internal extension Array {
 }
 
 ///
-/// 提供转换(只有直接使用源文件的情况下才可以使用)
+/// 提供转换
 ///
 internal extension Dictionary {
     
@@ -729,11 +729,28 @@ private func _sf_unserializeOfArray(src: AnyObject, elementTypeName: String) -> 
     
     // 必须是数组
     if let arr = src as? NSArray {
+        
         var rs = Array<AnyObject>()
+        var type: Any.Type?
+        
+        // 如果不是数组/字典/可选, 偿试直接获取到类型
+        if (!elementTypeName.hasPrefix("Swift.Array")
+            && !elementTypeName.hasPrefix("Swift.Optional")
+            && !elementTypeName.hasPrefix("Swift.Dictionary")) {
+                type = _sf_class(name: elementTypeName)
+        }
+        
         for o in arr {
-            // 可能还需要再次解释
-            if let s: AnyObject = _sf_unserialize(o, elementTypeName) {
-                rs.append(s)
+            if let type = type {
+                // 可能还需要再次解释
+                if let s: AnyObject = _sf_unserialize(o, type) {
+                    rs.append(s)
+                }
+            } else {
+                // 可能还需要再次解释
+                if let s: AnyObject = _sf_unserialize(o, elementTypeName) {
+                    rs.append(s)
+                }
             }
         }
         return rs
@@ -757,13 +774,30 @@ private func _sf_unserializeOfDictionary(src: AnyObject, keyTypeName: String, va
     if let dic = src as? NSDictionary {
         // 获取到key的class
         if let kt = _sf_convertOfType(_sf_class(name: keyTypeName)) {
-            var rs = Dictionary<NSObject, AnyObject>()
+            
+            var rs = Dictionary<NSObject, AnyObject>(minimumCapacity: dic.count)
+            var type: Any.Type?
+            
+            // 如果不是数组/字典/可选, 偿试直接获取到类型
+            if (!valueTypeName.hasPrefix("Swift.Array")
+                && !valueTypeName.hasPrefix("Swift.Optional")
+                && !valueTypeName.hasPrefix("Swift.Dictionary")) {
+                type = _sf_class(name: valueTypeName)
+            }
+            
             for (k, v) in dic {
                 // 转换为对应的值
                 if let k = _sf_convertOfValue(k, kt) as? NSObject {
-                    // 继续处理.
-                    if let v: AnyObject = _sf_unserialize(v, valueTypeName) {
-                        rs[k] = v
+                    if let type = type {
+                        // 继续处理. 不能直接识别的类型
+                        if let v: AnyObject = _sf_unserialize(v, type) {
+                            rs[k] = v
+                        }
+                    } else {
+                        // 继续处理. 不能直接识别的类型
+                        if let v: AnyObject = _sf_unserialize(v, valueTypeName) {
+                            rs[k] = v
+                        }
                     }
                 }
             }
