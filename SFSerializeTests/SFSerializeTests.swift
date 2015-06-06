@@ -9,8 +9,6 @@
 import UIKit
 import XCTest
 
-import SFSerialize
-
 class T1 : NSObject
 {
     @objc var t_stoi: Int = 0

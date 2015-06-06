@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0C0BA0291B1EC4E3008A5570 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 0C0BA0281B1EC4E3008A5570 /* test.json */; };
+		0C36F6C41B22D3F100805875 /* SFSerialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C950F951B1E098D00B6E2C8 /* SFSerialize.swift */; };
 		0C4B98E61B1D67FC00E470AB /* SFSerialize.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C4B98E51B1D67FC00E470AB /* SFSerialize.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0C4B98EC1B1D67FC00E470AB /* SFSerialize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C4B98E01B1D67FC00E470AB /* SFSerialize.framework */; };
+		0C4B98EC1B1D67FC00E470AB /* SFSerialize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C4B98E01B1D67FC00E470AB /* SFSerialize.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		0C4B98F31B1D67FC00E470AB /* SFSerializeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4B98F21B1D67FC00E470AB /* SFSerializeTests.swift */; };
 		0C950F961B1E098D00B6E2C8 /* SFSerialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C950F951B1E098D00B6E2C8 /* SFSerialize.swift */; };
 /* End PBXBuildFile section */
@@ -227,6 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C4B98F31B1D67FC00E470AB /* SFSerializeTests.swift in Sources */,
+				0C36F6C41B22D3F100805875 /* SFSerialize.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,7 +260,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -306,7 +308,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

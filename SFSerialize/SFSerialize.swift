@@ -130,27 +130,6 @@ public extension NSObject {
 /// 提供转换(只有直接使用源文件的情况下才可以使用)
 ///
 internal extension NSObject {
-    ///
-    /// 序列化
-    ///
-    /// :returns: 如果返回nil, 序列化失败
-    ///
-    func serialize() -> AnyObject? {
-        return _sf_serialize(self)
-    }
-
-    ///
-    /// 序列化
-    ///
-    /// :returns: 如果返回nil, 序列化失败
-    ///
-    func serializeToData() -> NSData? {
-        
-        if let json: AnyObject = serialize() {
-            return NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.allZeros, error: nil)
-        }
-        return nil
-    }
     
     ///
     /// 反序列化
@@ -185,31 +164,6 @@ internal extension NSObject {
 /// 提供转换(只有直接使用源文件的情况下才可以使用)
 ///
 internal extension Array {
-    ///
-    /// 序列化
-    ///
-    /// :returns: 如果返回nil, 序列化失败
-    ///
-    func serialize() -> AnyObject? {
-        
-        if let o: AnyObject = self as? AnyObject {
-            return _sf_serialize(o)
-        }
-        return nil
-    }
-    
-    ///
-    /// 序列化
-    ///
-    /// :returns: 如果返回nil, 序列化失败
-    ///
-    func serializeToData(o: AnyObject) -> NSData? {
-        
-        if let json: AnyObject = serialize() {
-            return NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.allZeros, error: nil)
-        }
-        return nil
-    }
     
     ///
     /// 反序列化
@@ -244,31 +198,6 @@ internal extension Array {
 /// 提供转换(只有直接使用源文件的情况下才可以使用)
 ///
 internal extension Dictionary {
-    ///
-    /// 序列化
-    ///
-    /// :returns: 如果返回nil, 序列化失败
-    ///
-    func serialize() -> AnyObject? {
-        
-        if let o: AnyObject = self as? AnyObject {
-            return _sf_serialize(o)
-        }
-        return nil
-    }
-    
-    ///
-    /// 序列化
-    ///
-    /// :returns: 如果返回nil, 序列化失败
-    ///
-    func serializeToData() -> NSData? {
-        
-        if let json: AnyObject = serialize() {
-            return NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.allZeros, error: nil)
-        }
-        return nil
-    }
     
     ///
     /// 反序列化

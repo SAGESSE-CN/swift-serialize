@@ -34,6 +34,5 @@ let object: AnyObject = unserialize(json: json, type: Type.self)
 
 // If you use the source file directly
 // There are also some extended operation 
-let json = object.serialize
 let object = Type.unserialize(json: json)
 ```
