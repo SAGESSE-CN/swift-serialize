@@ -178,6 +178,23 @@ class SFSerializeTests: XCTestCase {
     }
     
     func testUnserialize() {
+      
+        class T00 : NSObject {
+            @objc var dress = NSArray()
+            @objc var djs = NSDictionary()
+        }
+        
+        let d = ["dress":[[11000003, 11100079, 11200001, 11300054, 11400112, 11600042],
+                 [11800028, 101]],
+            "djs":["222":233]
+        ]
+        
+        let t0: T00? = unserialize(json: d)
+        
+        XCTAssert(t0 != nil)
+        XCTAssert(t0?.dress.count != 0)
+        XCTAssert(t0?.djs.count != 0)
+        
         for bundle in NSBundle.allBundles() {
             if let path = bundle.pathForResource("test", ofType: "json") {
                 if var s: T1 = unserialize(jsonData: NSData(contentsOfFile: path)) {

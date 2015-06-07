@@ -608,6 +608,11 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
         return o
     }
     
+    // 如果T的类型为AnyObject, 不需要处理 
+    if dstType is AnyObject.Type {
+        return src
+    }
+    
     // 其他类型.
     if let v: AnyObject = _sf_convertOfValue(src, dstType) {
         return v
@@ -729,7 +734,7 @@ private func _sf_unserializeOfArray(src: AnyObject, elementTypeName: String) -> 
         var rs = Array<AnyObject>()
         var type: Any.Type?
         
-        // !!这将会加载效率
+        // !!这将会提高解释效率
         // 如果不是容器, 偿试直接获取到类型
         if !_sf_isContainer(elementTypeName) {
             type = _sf_class(name: elementTypeName)
@@ -773,7 +778,7 @@ private func _sf_unserializeOfDictionary(src: AnyObject, keyTypeName: String, va
             var rs = Dictionary<NSObject, AnyObject>(minimumCapacity: dic.count)
             var type: Any.Type?
             
-            // !!这将会加载效率
+            // !!这将会提高解释效率
             // 如果不是容器, 偿试直接获取到类型
             if !_sf_isContainer(valueTypeName) {
                 type = _sf_class(name: valueTypeName)
