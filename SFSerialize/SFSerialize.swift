@@ -538,10 +538,12 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
                 
             case .Aggregate: // 基本类型
                 
-                // 数组/字典, 都转换不了
-                // 其他的可以由底层库直接转换
+                // 首先先试着手动转换
                 if let v: AnyObject = _sf_convertOfValue(val!, sm.valueType) {
                     o.setValue(v, forKey: n)
+                } else if !(val is NSArray || val is NSDictionary) {
+                    // 除了数组和字典, 其他的可以由底层库直接转换
+                    o.setValue(val!, forKey: n)
                 }
                 
             case .IndexContainer: // 数组

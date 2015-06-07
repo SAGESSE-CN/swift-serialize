@@ -58,6 +58,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "0C4B98EA1B1D67FC00E470AB"
+            BuildableName = "SFSerializeTests.xctest"
+            BlueprintName = "SFSerializeTests"
+            ReferencedContainer = "container:SFSerialize.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

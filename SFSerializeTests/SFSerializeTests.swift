@@ -178,22 +178,53 @@ class SFSerializeTests: XCTestCase {
     }
     
     func testUnserialize() {
-      
-        class T00 : NSObject {
-            @objc var dress = NSArray()
-            @objc var djs = NSDictionary()
+        
+        if true {
+            class T00 : NSObject {
+                @objc var dress = NSArray()
+                @objc var djs = NSDictionary()
+            }
+            
+            let d = ["dress":[[11000003, 11100079, 11200001, 11300054, 11400112, 11600042],
+                [11800028, 101]],
+                "djs":["222":233]
+            ]
+            
+            let t0: T00? = unserialize(json: d)
+            
+            XCTAssert(t0 != nil)
+            XCTAssert(t0?.dress.count != 0)
+            XCTAssert(t0?.djs.count != 0)
         }
         
-        let d = ["dress":[[11000003, 11100079, 11200001, 11300054, 11400112, 11600042],
-                 [11800028, 101]],
-            "djs":["222":233]
-        ]
+        if true {
+            
+            var json = [
+                "name":"兔子耳朵",
+                "classtype":1
+            ]
+            
+            class T01 : NSObject {
+                @objc var name = "unknow"
+                @objc var classtype: IType = .Prop
+                
+                @objc enum IType : Int {
+                    
+                    case Prop       = 0 ///< 道具
+                    case Dress      = 1 ///< 时装
+                    case Furniture  = 2 ///< 家具
+                    case Map        = 3 ///< 地图
+                    case Platform   = 4 ///< DJ台
+                }
+            }
+            
+            let t01 : T01? = unserialize(json: json)
+            
+            XCTAssert(t01 != nil)
+            XCTAssert(t01?.name == "兔子耳朵")
+            XCTAssert(t01?.classtype == .Dress)
+        }
         
-        let t0: T00? = unserialize(json: d)
-        
-        XCTAssert(t0 != nil)
-        XCTAssert(t0?.dress.count != 0)
-        XCTAssert(t0?.djs.count != 0)
         
         for bundle in NSBundle.allBundles() {
             if let path = bundle.pathForResource("test", ofType: "json") {
