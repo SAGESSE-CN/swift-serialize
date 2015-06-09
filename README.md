@@ -6,7 +6,7 @@
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat
 )](http://mit-license.org)
 [![Build Status](https://travis-ci.org/sagesse-cn/swift-serialize.svg?branch=master)](https://travis-ci.org/sagesse-cn/swift-serialize)
-swift object serialization/unserialization of json 
+* swift object serialization/unserialization of json 
 
 #### Serialize Support
 AnyObject
