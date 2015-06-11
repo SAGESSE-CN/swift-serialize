@@ -7,12 +7,12 @@
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat
 )](http://mit-license.org)
 
-swift object serialization/unserialization of json 
+swift object serialize/deserialize of json 
 
 #### Serialize Support
 AnyObject
 
-#### Unserialize Support
+#### Deserialize Support
 Type | Description
 ---- | ---------
 **Class**|Support, automatic inference type
@@ -28,6 +28,14 @@ Type | Description
 **MembershipContainer**|Unsupport, reason: Unknown
 
 ## Usage
+
+```swift
+// This property can not support
+var val: Int/UInt/Int8/Int16/Int32/Int64/CGFloat/Float/Double? 
+// Recommended instead of
+var val: Int/UInt/Int8/Int16/Int32/Int64/CGFloat/Float/Double
+```
+
 ```swift
 // Please copy `SFSerialize.swift` file to your project
 
@@ -35,9 +43,9 @@ Type | Description
 let json: AnyObject? = serialize(object)
 let data: NSData? = serializeToData(object)
 
-// unserialize.
+// deserialize.
 // Type for Array/Dictionary/Optional/NSObject and subclass
 // The NSObject and subclass, suggest add `@objc` check, Sample refer SFSerializeTests
-let object: Type? = unserialize(json: json)
-let object: AnyObject? = unserialize(json: json, type: Type.self)
+let object: Type? = deserialize(json: json)
+let object: AnyObject? = deserialize(json: json, type: Type.self)
 ```

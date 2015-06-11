@@ -110,7 +110,7 @@ class SFSerializeTests: XCTestCase {
     }
     
     func testA() {
-        let s: Dictionary<String, Int>? = unserialize(json: ["ss":"22"])
+        let s: Dictionary<String, Int>? = deserialize(json: ["ss":"22"])
         
         XCTAssert(s != nil)
     }
@@ -155,7 +155,7 @@ class SFSerializeTests: XCTestCase {
             XCTAssert(json["odn"] == nil)
             
             // 测试反序列化
-            if var tt: T4 = unserialize(json: json) {
+            if var tt: T4 = deserialize(json: json) {
                 
                 XCTAssert(tt.i == 2233)
                 XCTAssert(tt.f == 22.33)
@@ -177,7 +177,7 @@ class SFSerializeTests: XCTestCase {
         }
     }
     
-    func testUnserialize() {
+    func testdeserialize() {
         
         if true {
             class T00 : NSObject {
@@ -190,7 +190,7 @@ class SFSerializeTests: XCTestCase {
                 "djs":["222":233]
             ]
             
-            let t0: T00? = unserialize(json: d)
+            let t0: T00? = deserialize(json: d)
             
             XCTAssert(t0 != nil)
             XCTAssert(t0?.dress.count != 0)
@@ -218,7 +218,7 @@ class SFSerializeTests: XCTestCase {
                 }
             }
             
-            let t01 : T01? = unserialize(json: json)
+            let t01 : T01? = deserialize(json: json)
             
             XCTAssert(t01 != nil)
             XCTAssert(t01?.name == "兔子耳朵")
@@ -228,7 +228,7 @@ class SFSerializeTests: XCTestCase {
         
         for bundle in NSBundle.allBundles() {
             if let path = bundle.pathForResource("test", ofType: "json") {
-                if var s: T1 = unserialize(jsonData: NSData(contentsOfFile: path)) {
+                if var s: T1 = deserialize(jsonData: NSData(contentsOfFile: path)) {
                     
                     // 检查
                     XCTAssert(s.t_stoi == 22)
@@ -297,7 +297,7 @@ class SFSerializeTests: XCTestCase {
                     XCTAssert(s.t_dtot3?.t_m == "22.33")
                     
                 } else {
-                    XCTAssert(false, "unserialize fail")
+                    XCTAssert(false, "deserialize fail")
                 }
                 
                 return 

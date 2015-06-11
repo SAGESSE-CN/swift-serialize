@@ -50,8 +50,8 @@ public func serializeToData(o: AnyObject) -> NSData? {
 /// :param: jsonData json的原始数据
 /// :returns: 如果返回nil, 反序列化失败
 ///
-public func unserialize<T>(#jsonData: NSData?) -> T? {
-    return unserialize(jsonData: jsonData, type: T.self) as? T
+public func deserialize<T>(#jsonData: NSData?) -> T? {
+    return deserialize(jsonData: jsonData, type: T.self) as? T
 }
 
 ///
@@ -60,8 +60,8 @@ public func unserialize<T>(#jsonData: NSData?) -> T? {
 /// :param: json json数据 
 /// :returns: 如果返回nil, 反序列化失败
 ///
-public func unserialize<T>(#json: AnyObject?) -> T? {
-    return unserialize(json: json, type: T.self) as? T
+public func deserialize<T>(#json: AnyObject?) -> T? {
+    return deserialize(json: json, type: T.self) as? T
 }
 
 ///
@@ -70,10 +70,10 @@ public func unserialize<T>(#json: AnyObject?) -> T? {
 /// :param: jsonData json的原始数据
 /// :returns: 如果返回nil, 反序列化失败
 ///
-public func unserialize(#jsonData: NSData?, #type: Any.Type) -> AnyObject? {
+public func deserialize(#jsonData: NSData?, #type: Any.Type) -> AnyObject? {
     
     if let jsonData = jsonData {
-        return unserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil), type: type)
+        return deserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil), type: type)
     }
     return nil
 }
@@ -84,10 +84,10 @@ public func unserialize(#jsonData: NSData?, #type: Any.Type) -> AnyObject? {
 /// :param: json json数据 
 /// :returns: 如果返回nil, 反序列化失败
 ///
-public func unserialize(#json: AnyObject?, #type: Any.Type) -> AnyObject? {
+public func deserialize(#json: AnyObject?, #type: Any.Type) -> AnyObject? {
     
     if let json: AnyObject = json {
-        return _sf_unserialize(json, type)
+        return _sf_deserialize(json, type)
     }
     return nil
 }
@@ -137,10 +137,10 @@ internal extension NSObject {
     /// :param: jsonData json的原始数据
     /// :returns: 如果返回nil, 反序列化失败
     ///
-    static func unserialize(#jsonData: NSData?) -> NSObject? {
+    static func deserialize(#jsonData: NSData?) -> NSObject? {
         
         if let jsonData = jsonData {
-            return unserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
+            return deserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
         }
         return nil
     }
@@ -151,10 +151,10 @@ internal extension NSObject {
     /// :param: json json数据 
     /// :returns: 如果返回nil, 反序列化失败
     ///
-    static func unserialize(#json: AnyObject?) -> NSObject? {
+    static func deserialize(#json: AnyObject?) -> NSObject? {
         
         if let json: AnyObject = json {
-            return _sf_unserialize(json, self) as? NSObject
+            return _sf_deserialize(json, self) as? NSObject
         }
         return nil
     }
@@ -171,10 +171,10 @@ internal extension Array {
     /// :param: jsonData json的原始数据
     /// :returns: 如果返回nil, 反序列化失败
     ///
-    static func unserialize(#jsonData: NSData?) -> Array<T>? {
+    static func deserialize(#jsonData: NSData?) -> Array<T>? {
         
         if let jsonData = jsonData {
-            return unserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
+            return deserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
         }
         return nil
     }
@@ -185,10 +185,10 @@ internal extension Array {
     /// :param: json json数据 
     /// :returns: 如果返回nil, 反序列化失败
     ///
-    static func unserialize(#json: AnyObject?) -> Array<T>? {
+    static func deserialize(#json: AnyObject?) -> Array<T>? {
         
         if let json: AnyObject = json {
-            return _sf_unserialize(json, self) as? Array<T>
+            return _sf_deserialize(json, self) as? Array<T>
         }
         return nil
     }
@@ -205,10 +205,10 @@ internal extension Dictionary {
     /// :param: jsonData json的原始数据
     /// :returns: 如果返回nil, 反序列化失败
     ///
-    static func unserialize(#jsonData: NSData?) -> Dictionary<Key, Value>? {
+    static func deserialize(#jsonData: NSData?) -> Dictionary<Key, Value>? {
         
         if let jsonData = jsonData {
-            return unserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
+            return deserialize(json: NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments, error: nil))
         }
         return nil
     }
@@ -219,10 +219,10 @@ internal extension Dictionary {
     /// :param: json json数据 
     /// :returns: 如果返回nil, 反序列化失败
     ///
-    static func unserialize(#json: AnyObject?) -> Dictionary<Key, Value>? {
+    static func deserialize(#json: AnyObject?) -> Dictionary<Key, Value>? {
         
         if let json: AnyObject = json {
-            return _sf_unserialize(json, self) as? Dictionary<Key, Value>
+            return _sf_deserialize(json, self) as? Dictionary<Key, Value>
         }
         return nil
     }
@@ -446,7 +446,7 @@ private func _sf_serialize(src: AnyObject) -> AnyObject? {
 }
 
 
-/// MARK: - /// unserialize of json
+/// MARK: - /// deserialize of json
 
 
 ///
@@ -457,7 +457,7 @@ private func _sf_serialize(src: AnyObject) -> AnyObject? {
 ///
 /// :returns: 如果为nil, 反序列化失败
 ///
-private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
+private func _sf_deserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
   
     // 检查参数
     if src is NSNull {
@@ -532,7 +532,7 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
             case .Class: // 自定义类
                 
                 // 偿试解析
-                if let v: AnyObject = _sf_unserialize(val!, sm.valueType) {
+                if let v: AnyObject = _sf_deserialize(val!, sm.valueType) {
                     o.setValue(v, forKey: n)
                 }
                 
@@ -554,7 +554,7 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
                 }
                 
                 // 偿试解析
-                if let v: AnyObject = _sf_unserialize(val!, "\(sm.valueType)") {
+                if let v: AnyObject = _sf_deserialize(val!, "\(sm.valueType)") {
                     // 成功
                     o.setValue(v, forKey: n)
                 } else {
@@ -569,7 +569,7 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
                 }
                 
                 // 偿试解析
-                if let v: AnyObject = _sf_unserialize(val!, "\(sm.valueType)") {
+                if let v: AnyObject = _sf_deserialize(val!, "\(sm.valueType)") {
                     // 成功
                     o.setValue(v, forKey: n)
                 } else {
@@ -579,7 +579,7 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
             case .Optional: // 可选类型
                 
                 // 偿试解析
-                if let v: AnyObject = _sf_unserialize(val!, "\(sm.valueType)") {
+                if let v: AnyObject = _sf_deserialize(val!, "\(sm.valueType)") {
                     // 成功
                     o.setValue(v, forKey: n)
                 } else {
@@ -625,7 +625,7 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
     
     // 如果有数组/字典/可选
     if _sf_isContainer(dstTypeName) {
-        return _sf_unserialize(src, dstTypeName)
+        return _sf_deserialize(src, dstTypeName)
     }
     
     return nil
@@ -639,7 +639,7 @@ private func _sf_unserialize(src: AnyObject, dstType: Any.Type) -> AnyObject? {
 ///
 /// :returns: 如果为nil, 反序列化失败
 ///
-private func _sf_unserialize(src: AnyObject, dstTypeName: String) -> AnyObject? {
+private func _sf_deserialize(src: AnyObject, dstTypeName: String) -> AnyObject? {
     
     // 如果是Array, ex
     if dstTypeName.hasPrefix("Swift.Array") {
@@ -655,7 +655,7 @@ private func _sf_unserialize(src: AnyObject, dstTypeName: String) -> AnyObject? 
                 // 新的类型.
                 let etype = dstTypeName.substringWithRange(Range(start: b.endIndex, end: e.startIndex))
                 // 继续处理.
-                return _sf_unserializeOfArray(src, etype)
+                return _sf_deserializeOfArray(src, etype)
             }
         }
         
@@ -677,7 +677,7 @@ private func _sf_unserialize(src: AnyObject, dstTypeName: String) -> AnyObject? 
                 // 新的类型.
                 let vtype = dstTypeName.substringWithRange(Range(start: b.endIndex, end: e.startIndex))
                 // 继续处理.
-                return _sf_unserialize(src, vtype)
+                return _sf_deserialize(src, vtype)
             }
         }
         
@@ -702,7 +702,7 @@ private func _sf_unserialize(src: AnyObject, dstTypeName: String) -> AnyObject? 
                     // 获取Value类型
                     var vtype = dstTypeName.substringWithRange(Range(start: m.endIndex, end: e.startIndex))
                     // 继续处理.
-                    return _sf_unserializeOfDictionary(src, ktype, vtype)
+                    return _sf_deserializeOfDictionary(src, ktype, vtype)
                 }
             }
         }
@@ -713,7 +713,7 @@ private func _sf_unserialize(src: AnyObject, dstTypeName: String) -> AnyObject? 
     
     // 是否是识别的类
     if let type = _sf_class(name: dstTypeName) {
-        return _sf_unserialize(src, type)
+        return _sf_deserialize(src, type)
     }
     
     // 暂时处理不了...
@@ -728,7 +728,7 @@ private func _sf_unserialize(src: AnyObject, dstTypeName: String) -> AnyObject? 
 ///
 /// :returns: 如果为nil, 反序列化失败
 ///
-private func _sf_unserializeOfArray(src: AnyObject, elementTypeName: String) -> AnyObject? {
+private func _sf_deserializeOfArray(src: AnyObject, elementTypeName: String) -> AnyObject? {
     
     // 必须是数组
     if let arr = src as? NSArray {
@@ -745,12 +745,12 @@ private func _sf_unserializeOfArray(src: AnyObject, elementTypeName: String) -> 
         for o in arr {
             if let type = type {
                 // 成功的获取的到了元素的真实类型, 直接使用Type获取
-                if let s: AnyObject = _sf_unserialize(o, type) {
+                if let s: AnyObject = _sf_deserialize(o, type) {
                     rs.append(s)
                 }
             } else {
                 // 没有获取到元素的真实类型, 继续使用名字访问
-                if let s: AnyObject = _sf_unserialize(o, elementTypeName) {
+                if let s: AnyObject = _sf_deserialize(o, elementTypeName) {
                     rs.append(s)
                 }
             }
@@ -770,7 +770,7 @@ private func _sf_unserializeOfArray(src: AnyObject, elementTypeName: String) -> 
 ///
 /// :returns: 如果为nil, 反序列化失败
 ///
-private func _sf_unserializeOfDictionary(src: AnyObject, keyTypeName: String, valueTypeName: String) -> AnyObject? {
+private func _sf_deserializeOfDictionary(src: AnyObject, keyTypeName: String, valueTypeName: String) -> AnyObject? {
     
     // 必须是字典
     if let dic = src as? NSDictionary {
@@ -791,12 +791,12 @@ private func _sf_unserializeOfDictionary(src: AnyObject, keyTypeName: String, va
                 if let k = _sf_convertOfValue(k, kt) as? NSObject {
                     if let type = type {
                         // 成功的获取的到了值的真实类型, 直接使用Type获取
-                        if let v: AnyObject = _sf_unserialize(v, type) {
+                        if let v: AnyObject = _sf_deserialize(v, type) {
                             rs[k] = v
                         }
                     } else {
                         // 没有获取到值的真实类型, 继续使用名字访问
-                        if let v: AnyObject = _sf_unserialize(v, valueTypeName) {
+                        if let v: AnyObject = _sf_deserialize(v, valueTypeName) {
                             rs[k] = v
                         }
                     }
