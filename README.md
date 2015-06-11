@@ -45,7 +45,7 @@ let object: AnyObject? = deserialize(json: json, type: Type.self)
 
 ```swift
 // This property can not support
-var val: Optional<Int/UInt/Int8/Int16/Int32/Int64/CGFloat/Float/Double>
+var val: Optional<Int/UInt/CGFloat/Float/Double>
 // Recommended instead of
-var val: Int/UInt/Int8/Int16/Int32/Int64/CGFloat/Float/Double
+var val: Int/UInt/CGFloat/Float/Double
 ```
