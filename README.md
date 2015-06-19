@@ -31,13 +31,6 @@ Type 					| Description
 ## Usage
 
 ```swift
-// This property can not support
-var val: Int/UInt/Int8/Int16/Int32/Int64/CGFloat/Float/Double? 
-// Recommended instead of
-var val: Int/UInt/Int8/Int16/Int32/Int64/CGFloat/Float/Double
-```
-
-```swift
 // Please copy `SFSerialize.swift` file to your project
 
 // serialize.
@@ -49,4 +42,11 @@ let data: NSData? = serializeToData(object)
 // The NSObject and subclass, suggest add `@objc` check, Sample refer SerializeTests
 let object: Type? = deserialize(json: json)
 let object: AnyObject? = deserialize(json: json, type: Type.self)
+```
+
+```swift
+// This property can not support
+var val: Optional<Int/UInt/CGFloat/Float/Double>
+// Recommended instead of
+var val: Int/UInt/CGFloat/Float/Double
 ```
