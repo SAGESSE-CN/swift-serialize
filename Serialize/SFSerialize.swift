@@ -950,6 +950,8 @@ private struct nm {
             for i in 0 ..< cnt {
                 if let cls:AnyClass = vp[Int(i)] {
                     self.types["\(cls)"] = cls
+                    
+                    println(cls)
                 }
             }
         }

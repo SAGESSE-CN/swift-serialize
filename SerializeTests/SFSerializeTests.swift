@@ -9,6 +9,7 @@
 import UIKit
 import XCTest
 
+import Serialize
 
 class T1 : NSObject
 {
@@ -177,8 +178,8 @@ class SFSerializeTests: XCTestCase {
         }
     }
     
-    func testdeserialize() {
-        
+    func testDeserialize() {
+       
         if true {
             class T00 : NSObject {
                 @objc var dress = NSArray()
@@ -227,7 +228,7 @@ class SFSerializeTests: XCTestCase {
         
         
         for bundle in NSBundle.allBundles() {
-            if let path = bundle.pathForResource("test", ofType: "json") {
+            if let path = bundle.pathForResource("SFSerializeTests", ofType: "json") {
                 if var s: T1 = deserialize(jsonData: NSData(contentsOfFile: path)) {
                     
                     // 检查
@@ -304,6 +305,6 @@ class SFSerializeTests: XCTestCase {
             }
         }
         
-        XCTAssert(false, "not found test.json")
+        XCTAssert(false, "not found SFSerializeTests.json")
     }
 }
