@@ -30,9 +30,9 @@ Type 					| Description
 
 ## Usage
 
-[x] **Use Source**
-[x] **Use Framework**
-[ ] **Use Framework of Cocoapods**
+* [X] **Use Source**
+* [X] **Use Framework**
+* [ ] **Use Framework of Cocoapods**
 
 **Tip1:** If you don't know a type is available, please use the `@objc` to check it. 
 

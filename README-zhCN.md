@@ -30,9 +30,9 @@ AnyObject
 
 ## Usage
 
-[x] **使用源文件**
-[x] **使用Framework**
-[ ] **使用Cocoapods**
+* [X] **使用源文件**
+* [X] **使用Framework**
+* [ ] **使用Cocoapods**
 
 **Tip1:** 如果你不知道这个类型是否可用, 你可以使用`@objc`检查它. 
 
