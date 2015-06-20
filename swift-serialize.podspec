@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 
   s.name         = "swift-serialize"
   s.module_name  = "Serialize"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "swift object serialize/deserialize of json "
 
   s.description  = <<-DESC
