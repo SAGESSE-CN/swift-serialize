@@ -11,6 +11,34 @@ import XCTest
 
 import Serialize
 
+// 如果是自定义的类, 请继承于NSObject
+class Example : NSObject {
+    
+    // 基础类型
+    var val_int: Int = 0
+    var val_bool: Bool = false
+    var val_double: Double = 0
+    var val_string: String?
+    var val_array: [Int] = []
+    var val_dictionary: [Int:Int] = [:]
+    
+    // 无效的类型
+    //var val_int_invalid: Int?
+    //var val_bool_invalid: Bool?
+    //var val_doulbe_invalid: Double?
+    //var val_array_invalid: [Int?]?
+    //var val_dictionary_invalid: [Int:Int?]
+    
+    // 自定义类型
+    var val_custom: Custom?
+    var val_custom_array: [Custom]?
+    var val_custom_dictionary: [String:Custom]?
+    
+    class Custom : NSObject {
+        var val: Example?
+    }
+}
+
 class T1 : NSObject
 {
     @objc var t_stoi: Int = 0
