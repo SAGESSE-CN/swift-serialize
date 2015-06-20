@@ -34,19 +34,54 @@ AnyObject
 * [X] **使用Framework**
 * [ ] **使用Cocoapods**
 
+```swift
+
+// If it is a custom class that inherits from NSObject, please
+class Example : NSObject {
+    
+    // base type
+    var val_int: Int = 0
+    var val_bool: Bool = false
+    var val_double: Double = 0
+    var val_string: String?
+    var val_array: [Int] = []
+    var val_dictionary: [Int:Int] = [:]
+    
+    // invalid type
+    //var val_int_invalid: Int?
+    //var val_bool_invalid: Bool?
+    //var val_doulbe_invalid: Double?
+    //var val_array_invalid: [Int?]?
+    //var val_dictionary_invalid: [Int:Int?]
+    
+    // custom type
+    var val_custom: Custom?
+    var val_custom_array: [Custom]?
+    var val_custom_dictionary: [String:Custom]?
+    
+    class Custom : NSObject {
+        var val: Example?
+    }
+}
+
+let e1 = Example()
+let ae1 = [e1]
+let de1 = [1:e1]
+
+// serialize
+let json = serialize(e1)
+let ajson = serialize(ae1)
+let djson = serialize(de1)
+let data = serializeToData(e1)
+
+// deserialize
+let e2: Example? = deserialize(json: json)
+let e3: AnyObject? = deserialize(json: json, type: Example.self)
+let ae2: [Example]? = deserialize(json: ajson)
+let de2: [Int:Example]? = deserialize(json: djson)
+
+```
+
 **Tip1:** 如果你不知道这个类型是否可用, 你可以使用`@objc`检查它. 
 
 **Tip2:** 可选类型支持并没有全部支持, 如果`Optional<SomeType>`不支持, 你可以使用`SomeType`来替换掉他. 示例: Int, CGFloat, Double ...
-
-
-```swift
-// serialize.
-let json: AnyObject? = serialize(object)
-let data: NSData? = serializeToData(object)
-
-// deserialize.
-// Type for Array/Dictionary/Optional/NSObject and subclass
-// The NSObject and subclass, suggest add `@objc` check, Sample refer SerializeTests
-let object: Type? = deserialize(json: json)
-let object: AnyObject? = deserialize(json: json, type: Type.self)
-```
