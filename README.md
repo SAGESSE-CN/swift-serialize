@@ -83,4 +83,5 @@ let de2: [Int:Example]? = deserialize(json: djson)
 ```
 
 **Tip1:** If you don't know a type is available, please use the `@objc` to check it. 
+
 **Tip2:** If `Optional<SomeType>` can't support, you can use `SomeType` replace it. example: Int, CGFloat, Double ...
