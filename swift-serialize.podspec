@@ -6,14 +6,14 @@ Pod::Spec.new do |s|
 						serialize swift object to json
 						deserialize json for swift custom class
                        DESC
+
   s.homepage         = "https://github.com/sagesse-cn/swift-serialize"
   s.license          = 'MIT'
   s.author           = { "sagesse-cn" => "gdmmyzc@163.com" }
   s.source           = { :git => "https://github.com/sagesse-cn/swift-serialize.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/NAME'
 
-  s.platform     = :ios, '7.0'
-  s.ios.deployment_target = '7.0'
+  s.platform     = :ios, '8.0'
+  # s.ios.deployment_target = '8.0'
   # s.osx.deployment_target = '10.7'
   s.requires_arc = true
 
