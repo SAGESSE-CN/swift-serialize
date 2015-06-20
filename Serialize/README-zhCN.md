@@ -32,18 +32,9 @@ AnyObject
 
 * [X] **使用源文件**
 * [X] **使用Framework**
-* [X] **使用Cocoapods**
-
-Cocoapods Podfile: 
-```Shell
-platform :ios, '8.0'
-pod "swift-serialize"
-use_frameworks!
-```
+* [ ] **使用Cocoapods**
 
 ```swift
-// if use framework or cocoapods, need import library
-import Serialize
 
 // If it is a custom class that inherits from NSObject, please
 class Example : NSObject {

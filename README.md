@@ -31,10 +31,20 @@ Type 					| Description
 ## Usage
 
 * [X] **Use Source**
-* [X] **Use Framework**
-* [ ] **Use Cocoapods**
+* [X] **Use Framework** 
+* [X] **Use Cocoapods** 
+
+Cocoapods Podfile: 
+```Shell
+platform :ios, '8.0'
+pod "swift-serialize"
+use_frameworks!
+```
 
 ```swift
+// if use framework or cocoapods, need import library
+import Serialize
+
 
 // If it is a custom class that inherits from NSObject, please
 class Example : NSObject {
