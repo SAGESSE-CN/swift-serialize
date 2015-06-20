@@ -7,15 +7,15 @@
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat
 )](http://mit-license.org)
 
-* The type of Swift custom serialization to Json
-* Read the Json sequence for Swift custom types
+* serialize swift custom class to json
+* deserialize json for swift custom class
 
 ### Serialize Support
 AnyObject
 
 ### Deserialize Support
 Type 					| Description
----------------------- | -----------------------------------------------
+----------------------- | -----------------------------------------------
 **Class**				| Support, automatic inference type
 **Aggregate**			| Support, automatic inference type
 **IndexContainer**		| Support, automatic inference element type

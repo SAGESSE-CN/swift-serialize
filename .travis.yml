@@ -4,4 +4,4 @@ before_install:
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 script:
   - set -o pipefail
-  - xcodebuild -project SFSerialize.xcodeproj -scheme SFSerialize -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6" ONLY_ACTIVE_ARCH=NO test | xcpretty -c
+  - xcodebuild -project Serialize.xcodeproj -scheme Serialize -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6" ONLY_ACTIVE_ARCH=NO test | xcpretty -c

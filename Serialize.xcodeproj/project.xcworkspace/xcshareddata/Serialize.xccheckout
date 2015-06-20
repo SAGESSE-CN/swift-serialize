@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>547949E4-D84D-4677-AEE8-58B90FBF4EF6</string>
 	<key>IDESourceControlProjectName</key>
-	<string>Serialize</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>97820BC5D4698BF9EEA1B60A6097223724FD2C0C</key>
 		<string>https://github.com/sagesse-cn/swift-serialize.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Serialize.xcodeproj</string>
+	<string>Serialize.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>97820BC5D4698BF9EEA1B60A6097223724FD2C0C</key>
