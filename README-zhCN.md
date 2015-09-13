@@ -3,7 +3,7 @@
 )](https://developer.apple.com/iphone/index.action)
 [![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat
 )](https://developer.apple.com/swift)
-[![Build Status](https://travis-ci.org/sagesse-cn/swift-serialize.svg?branch=master)](https://travis-ci.org/sagesse-cn/swift-serialize)
+[![Build Status](https://travis-ci.org/sagesse-cn/swift-serialize.svg?branch=swift-1.2)](https://travis-ci.org/sagesse-cn/swift-serialize)
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat
 )](http://mit-license.org)
 
