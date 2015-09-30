@@ -99,6 +99,9 @@ class T1 : NSObject
     @objc var t_dtood: [Int:Int]?
     @objc var t_ntood: [Int:Int]?
     
+    @objc var t_atoset = Set<Int>()
+    @objc var t_atooset = Set<Int>?()
+    
     @objc var t_dtot2: T2?
           var t_dtot3: T2.T3?
 }
@@ -124,6 +127,30 @@ class T4 : NSObject {
     var d : [Int:Int] = [:]
     var od : [Int:Int]?
     var odn : [Int:Int]?
+    
+    var set = Set<Int>()
+}
+
+struct s1 {
+}
+enum e1 {
+    case zero
+}
+class c1 {
+}
+
+class Test : NSObject {
+    
+    enum EI : Int {
+        case S1 = 1
+    }
+    enum ES : String {
+        case S1  = "te"
+    }
+    
+    
+    var ei = EI.S1
+    // var es = ES.S1 // 错误 !!会发生异常
 }
 
 class SFSerializeTests: XCTestCase {
@@ -138,16 +165,57 @@ class SFSerializeTests: XCTestCase {
         super.tearDown()
     }
     
-    func testA() {
-        let s: Dictionary<String, Int>? = deserialize(json: ["ss":"22"])
+    /// 测试依赖
+    func testDepends() {
+        let i:Int = 0
+        let f:Float = 0
+        let d:Double = 0
+        let s = s1()
+        let e = e1.zero
+        let c = c1()
         
-        XCTAssert(s != nil)
+        // 基础类型没有显示style
+        XCTAssert(Mirror(reflecting: i).displayStyle == nil)
+        XCTAssert(Mirror(reflecting: f).displayStyle == nil)
+        XCTAssert(Mirror(reflecting: d).displayStyle == nil)
+        //
+        XCTAssert(Mirror(reflecting: s).displayStyle == .Struct)
+        XCTAssert(Mirror(reflecting: e).displayStyle == .Enum)
+        XCTAssert(Mirror(reflecting: c).displayStyle == .Class)
     }
+    
+    /// 测试解包
+    func testUnwraps() {
+        
+        let o: Int?? = 0
+        let n: Int?? = nil
+        
+        XCTAssert(unwraps(o).dynamicType is Int.Type)
+        XCTAssert(unwraps(n).dynamicType is Optional<Optional<Int>>.Type)
+    }
+    
+    /// 测试枚举
+    func testEnum() {
+        
+        let t = Test()
+        let o = serialize(t)
+        
+        // 暂时不支持 - swift 2.0
+        XCTAssert(o == nil)
+    }
+    
+    
+//    func testA() {
+//        let s: Dictionary<String, Int>? = deserialize(json: ["ss":"22"])
+//        
+//        XCTAssert(s != nil)
+//    }
+    
     
     func testSerialize() {
         
-        var t = T4()
-        var t3 = T2.T3()
+        let t = T4()
+        let t3 = T2.T3()
         
         t3.t_m = "333"
         
@@ -162,6 +230,7 @@ class SFSerializeTests: XCTestCase {
         t.d = [1:2,3:4,5:6,7:8]
         t.od = [1:2,3:4,5:6,7:8]
         t.t3 = t3
+        t.set = [1,2,3]
         
         if let json = serialize(t) as? NSDictionary {
             
@@ -182,9 +251,10 @@ class SFSerializeTests: XCTestCase {
             XCTAssert(json["d"]?.count == 4)
             XCTAssert(json["od"]?.count == 4)
             XCTAssert(json["odn"] == nil)
+            XCTAssert(json["set"]?.count == 3)
             
             // 测试反序列化
-            if var tt: T4 = deserialize(json: json) {
+            if let tt: T4 = deserialize(json: json) {
                 
                 XCTAssert(tt.i == 2233)
                 XCTAssert(tt.f == 22.33)
@@ -201,6 +271,7 @@ class SFSerializeTests: XCTestCase {
                 XCTAssert(tt.od != nil)
                 XCTAssert(tt.od?.count == 4)
                 XCTAssert(tt.odn == nil)
+                XCTAssert(tt.set.count == 3)
                 
             }
         }
@@ -228,7 +299,7 @@ class SFSerializeTests: XCTestCase {
         
         if true {
             
-            var json = [
+            let json = [
                 "name":"兔子耳朵",
                 "classtype":1
             ]
@@ -257,7 +328,7 @@ class SFSerializeTests: XCTestCase {
         
         for bundle in NSBundle.allBundles() {
             if let path = bundle.pathForResource("SFSerializeTests", ofType: "json") {
-                if var s: T1 = deserialize(jsonData: NSData(contentsOfFile: path)) {
+                if let s: T1 = deserialize(jsonData: NSData(contentsOfFile: path)) {
                     
                     // 检查
                     XCTAssert(s.t_stoi == 22)
@@ -324,6 +395,9 @@ class SFSerializeTests: XCTestCase {
                     XCTAssert(s.t_dtot2?.t_m == 22.33)
                     XCTAssert(s.t_dtot3 != nil)
                     XCTAssert(s.t_dtot3?.t_m == "22.33")
+                    
+                    XCTAssert(s.t_atoset.count == 2)
+                    XCTAssert(s.t_atooset?.count == 2)
                     
                 } else {
                     XCTAssert(false, "deserialize fail")

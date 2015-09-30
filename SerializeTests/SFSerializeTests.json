@@ -59,6 +59,9 @@
     "t_dtood" : {"2":2}  ,
     "t_ntood" :  null    ,
     
+    "t_atoset" : [22,33]  ,
+    "t_atooset" : [22,33]  ,
+    
     "t_dtot2" : {
         "t_m":22.33
     },

@@ -29,7 +29,7 @@
 		0C4B98F11B1D67FC00E470AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0C4B98F21B1D67FC00E470AB /* SFSerializeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSerializeTests.swift; sourceTree = "<group>"; };
 		0C8521D61B1FED5600903282 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		0C950F951B1E098D00B6E2C8 /* SFSerialize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SFSerialize.swift; sourceTree = "<group>"; };
+		0C950F951B1E098D00B6E2C8 /* SFSerialize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SFSerialize.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		0CB2F6A51B3411B400ABBFCE /* Serialize.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Serialize.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CB2F6AF1B3411B400ABBFCE /* SerializeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SerializeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -162,6 +162,8 @@
 		0C4B98D71B1D67FC00E470AB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = Sagesse;
 				TargetAttributes = {
