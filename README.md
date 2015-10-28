@@ -11,22 +11,25 @@
 * deserialize json for swift custom class
 
 ### Serialize Support
-AnyObject
+AnyObject (Most)
 
 ### Deserialize Support
 Type 					| Description
 ----------------------- | -----------------------------------------------
+**MembershipContainer**	| Unsupport, reason: Unknown
 **Class**				| Support, automatic inference type
-**Aggregate**			| Support, automatic inference type
-**IndexContainer**		| Support, automatic inference element type
-**KeyContainer**		| Support, automatic inference key/value type
-**ObjCObject**			| Support, automatic inference type
-**Optional**			| Part Support, Please use `@objc` check
-**Enum**				| Part Support, Please use `@objc` check
+**Enum**				| Support Int Only 
 **Struct**				| Unsupport, reason: Not KVC
 **Tuple**				| Unsupport, reason: Not KVC
-**Container**			| Unsupport, reason: Unknown
-**MembershipContainer**	| Unsupport, reason: Unknown
+**Optional**			| Part Support, Please use `@objc` check
+**Collection**          | Support, automatic inference element type
+**Dictionary**          | Support, automatic inference key/value type
+**Set**                 | Support, automatic inference element type, (is a unique array)
+
+## Ext plan
+* [ ] NSDate
+* [ ] NSData(Base64)
+* [ ] UIImage(Base64)
 
 ## Usage
 
@@ -45,10 +48,9 @@ use_frameworks!
 // if use framework or cocoapods, need import library
 import Serialize
 
-
 // If it is a custom class that inherits from NSObject, please
 class Example : NSObject {
-    
+
     // base type
     var val_int: Int = 0
     var val_bool: Bool = false
@@ -56,39 +58,46 @@ class Example : NSObject {
     var val_string: String?
     var val_array: [Int] = []
     var val_dictionary: [Int:Int] = [:]
-    
+
     // invalid type
     //var val_int_invalid: Int?
     //var val_bool_invalid: Bool?
     //var val_doulbe_invalid: Double?
     //var val_array_invalid: [Int?]?
     //var val_dictionary_invalid: [Int:Int?]
-    
+
     // custom type
     var val_custom: Custom?
     var val_custom_array: [Custom]?
     var val_custom_dictionary: [String:Custom]?
-    
+
     class Custom : NSObject {
         var val: Example?
     }
 }
 
 let e1 = Example()
-let ae1 = [e1]
-let de1 = [1:e1]
+
+e1.val_int = 123
+e1.val_bool = true
+e1.val_double = 456.0
+e1.val_string = "hello swift"
+e1.val_array = [7, 8, 9]
+e1.val_dictionary = [10 : 11, 12 : 13, 14 : 15]
 
 // serialize
 let json = serialize(e1)
-let ajson = serialize(ae1)
-let djson = serialize(de1)
-let data = serializeToData(e1)
+let jsonData = serializeToData(e1)
+let jsonStr = NSString(data: jsonData!, encoding: NSUTF8StringEncoding)
+
+// {"val_string":"hello swift","val_bool":true,"val_dictionary":{"12":13,"14":15,"10":11},"val_array":[7,8,9],"val_int":123,"val_double":456}
+print(jsonStr)
 
 // deserialize
 let e2: Example? = deserialize(json: json)
 let e3: AnyObject? = deserialize(json: json, type: Example.self)
-let ae2: [Example]? = deserialize(json: ajson)
-let de2: [Int:Example]? = deserialize(json: djson)
+
+// e1 == e2 == e3
 
 ```
 

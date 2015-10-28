@@ -409,4 +409,57 @@ class SFSerializeTests: XCTestCase {
         
         XCTAssert(false, "not found SFSerializeTests.json")
     }
+    
+    func testExample() {
+        // If it is a custom class that inherits from NSObject, please
+        class Example : NSObject {
+            
+            // base type
+            var val_int: Int = 0
+            var val_bool: Bool = false
+            var val_double: Double = 0
+            var val_string: String?
+            var val_array: [Int] = []
+            var val_dictionary: [Int:Int] = [:]
+            
+            // invalid type
+            //var val_int_invalid: Int?
+            //var val_bool_invalid: Bool?
+            //var val_doulbe_invalid: Double?
+            //var val_array_invalid: [Int?]?
+            //var val_dictionary_invalid: [Int:Int?]
+            
+            // custom type
+            var val_custom: Custom?
+            var val_custom_array: [Custom]?
+            var val_custom_dictionary: [String:Custom]?
+            
+            class Custom : NSObject {
+                var val: Example?
+            }
+        }
+        
+        let e1 = Example()
+        
+        e1.val_int = 123
+        e1.val_bool = true
+        e1.val_double = 456.0
+        e1.val_string = "hello swift"
+        e1.val_array = [7, 8, 9]
+        e1.val_dictionary = [10 : 11, 12 : 13, 14 : 15]
+        
+        // serialize
+        let json = serialize(e1)
+        let jsonData = serializeToData(e1)
+        let jsonStr = NSString(data: jsonData!, encoding: NSUTF8StringEncoding)
+        
+        // {"val_string":"hello swift","val_bool":true,"val_dictionary":{"12":13,"14":15,"10":11},"val_array":[7,8,9],"val_int":123,"val_double":456}
+        print(jsonStr)
+        
+        // deserialize
+        let e2: Example? = deserialize(json: json)
+        let e3: AnyObject? = deserialize(json: json, type: Example.self)
+        
+        // e1 == e2 == e3
+    }
 }
