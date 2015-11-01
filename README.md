@@ -10,6 +10,8 @@
 * serialize swift object to json
 * deserialize json for swift custom class
 
+-- 文档未更新...(Document is not updated...)
+
 ### Serialize Support
 AnyObject (Most)
 
@@ -27,9 +29,10 @@ Type 					| Description
 **Set**                 | Support, automatic inference element type, (is a unique array)
 
 ## Ext plan
-* [ ] NSDate
-* [ ] NSData(Base64)
-* [ ] UIImage(Base64)
+* [X] NSDate
+* [X] NSURL
+* [X] NSData(Base64)
+* [X] UIImage(Base64)
 
 ## Usage
 
@@ -50,7 +53,7 @@ import Serialize
 
 // If it is a custom class that inherits from NSObject, please
 class Example : NSObject {
-
+    
     // base type
     var val_int: Int = 0
     var val_bool: Bool = false
@@ -58,19 +61,19 @@ class Example : NSObject {
     var val_string: String?
     var val_array: [Int] = []
     var val_dictionary: [Int:Int] = [:]
-
+    
     // invalid type
     //var val_int_invalid: Int?
     //var val_bool_invalid: Bool?
     //var val_doulbe_invalid: Double?
     //var val_array_invalid: [Int?]?
     //var val_dictionary_invalid: [Int:Int?]
-
+    
     // custom type
     var val_custom: Custom?
     var val_custom_array: [Custom]?
     var val_custom_dictionary: [String:Custom]?
-
+    
     class Custom : NSObject {
         var val: Example?
     }
@@ -86,19 +89,22 @@ e1.val_array = [7, 8, 9]
 e1.val_dictionary = [10 : 11, 12 : 13, 14 : 15]
 
 // serialize
-let json = serialize(e1)
-let jsonData = serializeToData(e1)
-let jsonStr = NSString(data: jsonData!, encoding: NSUTF8StringEncoding)
+let json = Serialize.serialize(e1)
+let jsonData = try! Serialize.serializeToJSONData(e1)
+let jsonString = try! Serialize.serializeToJSONString(e1)
+
+// 138
+print(jsonData!.length)
 
 // {"val_string":"hello swift","val_bool":true,"val_dictionary":{"12":13,"14":15,"10":11},"val_array":[7,8,9],"val_int":123,"val_double":456}
-print(jsonStr)
+print(jsonString!)
 
 // deserialize
-let e2: Example? = deserialize(json: json)
-let e3: AnyObject? = deserialize(json: json, type: Example.self)
+let e2: Example? = Serialize.deserialize(json!)
+let e3: Example? = Serialize.deserialize(json!, Example.self) as? Example
 
-// e1 == e2 == e3
-
+print(e1 == e2)
+print(e2 == e3)
 ```
 
 **Tip1:** If you don't know a type is available, please use the `@objc` to check it. 

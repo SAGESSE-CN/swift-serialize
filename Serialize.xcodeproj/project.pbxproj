@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C307FF41B341245005F1D8D /* SFSerializeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4B98F21B1D67FC00E470AB /* SFSerializeTests.swift */; };
-		0C7359131B34229300DD5D29 /* SFSerializeTests.json in Resources */ = {isa = PBXBuildFile; fileRef = 0C0BA0281B1EC4E3008A5570 /* SFSerializeTests.json */; };
+		0C307FF41B341245005F1D8D /* SerializeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4B98F21B1D67FC00E470AB /* SerializeTests.swift */; };
+		0C7359131B34229300DD5D29 /* SerializeTests.json in Resources */ = {isa = PBXBuildFile; fileRef = 0C0BA0281B1EC4E3008A5570 /* SerializeTests.json */; };
 		0CB2F6B01B3411B400ABBFCE /* Serialize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CB2F6A51B3411B400ABBFCE /* Serialize.framework */; };
-		0CB2F6BE1B3411EE00ABBFCE /* SFSerialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C950F951B1E098D00B6E2C8 /* SFSerialize.swift */; };
+		0CB2F6BE1B3411EE00ABBFCE /* Serialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C950F951B1E098D00B6E2C8 /* Serialize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,12 +24,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0C0BA0281B1EC4E3008A5570 /* SFSerializeTests.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = SFSerializeTests.json; sourceTree = "<group>"; };
+		0C0BA0281B1EC4E3008A5570 /* SerializeTests.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = SerializeTests.json; sourceTree = "<group>"; };
 		0C4B98E41B1D67FC00E470AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0C4B98F11B1D67FC00E470AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0C4B98F21B1D67FC00E470AB /* SFSerializeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSerializeTests.swift; sourceTree = "<group>"; };
+		0C4B98F21B1D67FC00E470AB /* SerializeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializeTests.swift; sourceTree = "<group>"; };
 		0C8521D61B1FED5600903282 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		0C950F951B1E098D00B6E2C8 /* SFSerialize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SFSerialize.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		0C950F951B1E098D00B6E2C8 /* Serialize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serialize.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		0CB2F6A51B3411B400ABBFCE /* Serialize.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Serialize.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CB2F6AF1B3411B400ABBFCE /* SerializeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SerializeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -74,7 +74,7 @@
 		0C4B98E21B1D67FC00E470AB /* Serialize */ = {
 			isa = PBXGroup;
 			children = (
-				0C950F951B1E098D00B6E2C8 /* SFSerialize.swift */,
+				0C950F951B1E098D00B6E2C8 /* Serialize.swift */,
 				0C4B98E31B1D67FC00E470AB /* Supporting Files */,
 			);
 			path = Serialize;
@@ -92,8 +92,8 @@
 		0C4B98EF1B1D67FC00E470AB /* SerializeTests */ = {
 			isa = PBXGroup;
 			children = (
-				0C0BA0281B1EC4E3008A5570 /* SFSerializeTests.json */,
-				0C4B98F21B1D67FC00E470AB /* SFSerializeTests.swift */,
+				0C0BA0281B1EC4E3008A5570 /* SerializeTests.json */,
+				0C4B98F21B1D67FC00E470AB /* SerializeTests.swift */,
 				0C4B98F01B1D67FC00E470AB /* Supporting Files */,
 			);
 			path = SerializeTests;
@@ -164,7 +164,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Sagesse;
 				TargetAttributes = {
 					0CB2F6A41B3411B400ABBFCE = {
@@ -205,7 +205,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C7359131B34229300DD5D29 /* SFSerializeTests.json in Resources */,
+				0C7359131B34229300DD5D29 /* SerializeTests.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,7 +216,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0CB2F6BE1B3411EE00ABBFCE /* SFSerialize.swift in Sources */,
+				0CB2F6BE1B3411EE00ABBFCE /* Serialize.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,7 +224,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C307FF41B341245005F1D8D /* SFSerializeTests.swift in Sources */,
+				0C307FF41B341245005F1D8D /* SerializeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +261,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -343,6 +344,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SF.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -359,6 +361,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SF.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -367,17 +370,15 @@
 		0CB2F6BC1B3411B400ABBFCE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = SerializeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SF.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -385,13 +386,11 @@
 		0CB2F6BD1B3411B400ABBFCE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SerializeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SF.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
