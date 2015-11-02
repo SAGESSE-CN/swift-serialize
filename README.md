@@ -68,11 +68,16 @@ print(e2 == e3)
 
 ## 如何让struct/class支持Serialize
 
-方法1: 使用`Codeable`
-`Codeable`需要实现`setValue:forSerialize:`和`valueForSerialize:`方法
-`Buildable`只在反序列化的时候使用, 如果你不需要反序列化可以跳过
-序列化: 将直接获取成员因此并没有调用`valueForSerialize:`, 该函数作为保留函数
+#### 方法1: 使用`Codeable`
+
+`Codeable`需要实现`setValue:forSerialize:`和`valueForSerialize:`方法.
+
+`Buildable`只在反序列化的时候使用, 如果你不需要反序列化可以跳过.
+
+序列化: 将直接获取成员因此并没有调用`valueForSerialize:`, 该函数作为保留函数.
+
 反序列化: 将使用`setValue:forSerialize:`, 需要在方法里对每一个成员进行更新, 可以使用`assign`简化类型转换的代码
+
 ```swift
 class Example : Buildable, Codeable {
     var a: Optional<Int> = nil
@@ -100,9 +105,10 @@ class Example : Buildable, Codeable {
 ```
 
 #### 方法2: 使用`Serializeable`
+
 `Serializeable`需要实现`serialize`和`deserialize:`
 
-NOTE: 不要在`deserialize:`和`serialize`里面调用全局的`serialize`和`deserialize`, 这将会造成递归
+**NOTE**: 不要在`deserialize:`和`serialize`里面调用全局的`serialize`和`deserialize`, 这将会造成递归
 ```swift
 class Example : Serializeable {
     var a: Optional<Int> = nil
@@ -149,9 +155,13 @@ class Example : Serializeable {
 ```
 
 #### 方法3: 继承于`NSObject`
+
 `NSObject`只会使用`Serializeable`, 他己经实现了`serialize`和`deserialize:`.
+
 大部分情况下都可以直接用系统的KVC(NSKeyValueCoding), 但也有一些情况是没有办法使用系统的KVC的.
+
 你可以使用`@objc`来检查是否原生支持, 对于那些没有支持的, 你需要实现`Codeable`
+
 ```swift
 class Example : NSObject, Codeable {
 
