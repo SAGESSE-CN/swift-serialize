@@ -246,7 +246,7 @@ class SE3<T> : Buildable, Codeable {
     }
 }
 
-class SFSerializeTests: XCTestCase {
+class SerializeTests: XCTestCase {
     
     class E1 : NSObject, Codeable {
               var a: Optional<Int> = nil
