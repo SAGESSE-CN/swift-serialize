@@ -51,16 +51,16 @@ e1.val_array = [7, 8, 9]
 e1.val_dictionary = [10 : 11, 12 : 13, 14 : 15]
 
 // serialize
-let json = Serialize.serialize(e1)
-let jsonData = try! Serialize.serializeToJSONData(e1)
-let jsonString = try! Serialize.serializeToJSONString(e1)
+let json = serialize(e1)
+let jsonData = try! serializeToJSONData(e1)
+let jsonString = try! serializeToJSONString(e1)
 
 print(jsonData!.length)
 print(jsonString!)
 
 // deserialize
-let e2: Example? = Serialize.deserialize(json!)
-let e3: Example? = Serialize.deserialize(json!, Example.self) as? Example
+let e2: Example? = deserialize(json!)
+let e3: Example? = deserialize(json!, Example.self) as? Example
 
 print(e1 == e2)
 print(e2 == e3)
@@ -108,7 +108,6 @@ class Example : Buildable, Codeable {
 
 `Serializeable`需要实现`serialize`和`deserialize:`
 
-**NOTE**: 不要在`deserialize:`和`serialize`里面调用全局的`serialize`和`deserialize`, 这将会造成递归
 ```swift
 class Example : Serializeable {
     var a: Optional<Int> = nil
