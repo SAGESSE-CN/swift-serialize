@@ -144,18 +144,6 @@ func _serialize(o: Any, _ t: Any.Type) -> AnyObject? {
 ///
 /// - parameter o: 解释后的数据(JSON/XML/...) \
 ///                内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
-/// - parameter T: 目标类型
-/// - returns: 如果返回nil, 反序列化失败
-///
-func _deserialize<T>(o: AnyObject) -> T? {
-    return _deserialize(o, T.self) as? T
-}
-
-///
-/// 反序列化(内部函数)
-///
-/// - parameter o: 解释后的数据(JSON/XML/...) \
-///                内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
 /// - parameter t: 目标类型
 /// - returns: 如果返回nil, 反序列化失败
 ///
@@ -305,7 +293,7 @@ public func serializeToJSONString(o: Any) throws -> String? {
 /// - returns: 如果返回nil, 反序列化失败
 ///
 public func deserialize<T>(o: AnyObject) -> T?  {
-    return _deserialize(o)
+    return _deserialize(o, T.self) as? T
 }
 
 ///
@@ -470,7 +458,7 @@ extension Dictionary : Serializeable {
         let dic = NSMutableDictionary()
         for (k, v) in self {
             // 第一步序列化key
-            if let k = _serialize(k) as? NSCopying {
+            if let k = _serialize(k) {
                 // 只支持转换为`NSString`
                 guard let k = NSString.deserialize(k) else {
                     continue
@@ -645,7 +633,7 @@ extension UInt : Serializeable {
     /// 序列化
     ///
     public func serialize() -> AnyObject? {
-        return NSNumber(unsignedInteger: self)
+        return NSNumber(unsignedLong: self)
     }
     ///
     /// 反序列化
@@ -653,7 +641,7 @@ extension UInt : Serializeable {
     public static func deserialize(o: AnyObject) -> UInt? {
         // 如果可以的话转换一下..
         if let number = NSNumber.deserialize(o) {
-            return number.unsignedIntegerValue
+            return number.unsignedLongValue
         }
         return nil
     }
@@ -829,7 +817,7 @@ extension NSObject : Serializeable, Buildable {
             }
         }
         // ok
-        return dic
+        return dic.count != 0 ? dic : nil
     }
     ///
     /// 反序列化
