@@ -52,15 +52,15 @@ e1.val_dictionary = [10 : 11, 12 : 13, 14 : 15]
 
 // serialize
 let json = serialize(e1)
-let jsonData = try! serializeToJSONData(e1)
-let jsonString = try! serializeToJSONString(e1)
+let jsonData = try! Serialize.serializeToJSONData(e1)
+let jsonString = try! Serialize.serializeToJSONString(e1)
 
 print(jsonData!.length)
 print(jsonString!)
 
 // deserialize
-let e2: Example? = deserialize(json!)
-let e3: Example? = deserialize(json!, Example.self) as? Example
+let e2: Example? = Serialize.deserialize(json!)
+let e3: Example? = Serialize.deserialize(json!, Example.self) as? Example
 
 print(e1 == e2)
 print(e2 == e3)
