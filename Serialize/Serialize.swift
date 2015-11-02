@@ -85,6 +85,161 @@ public protocol Codeable {
     mutating func setValue(value: Any?, forSerialize key: String)
 }
 
+// MARK: - Public Package
+
+///
+/// 打包函数为模块避免作用域冲突
+///
+public struct Serialize {
+    ///
+    /// 序列化
+    ///
+    /// - parameter o: 需要序列化的对象
+    /// - returns: 如果返回nil, 序列化失败 \
+    ///            内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
+    ///
+    public static func serialize(o: Any) -> AnyObject? {
+        return _serialize(o)
+    }
+    ///
+    /// 序列化(未实现)
+    ///
+    /// - parameter o: 需要序列化的对象
+    /// - parameter t: 指定对象的KEY
+    /// - returns: 如果返回nil, 序列化失败 \
+    ///            内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
+    ///
+    public static func serialize(o: Any, _ t: Any.Type) -> AnyObject? {
+        return _serialize(o, t)
+    }
+    ///
+    /// 序列化为json(NSData)
+    ///
+    /// - parameter o: 需要序列化的对象
+    /// - returns: 如果返回nil, 序列化失败
+    ///
+    public static func serializeToJSONData(o: Any) throws -> NSData? {
+        if let json = _serialize(o) {
+            return try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions(rawValue: 0))
+        }
+        return nil
+    }
+    ///
+    /// 序列化为json(NSString)
+    ///
+    /// - parameter o: 需要序列化的对象
+    /// - returns: 如果返回nil, 序列化失败
+    ///
+    public static func serializeToJSONString(o: Any) throws -> String? {
+        if let data = try serializeToJSONData(o) {
+            return String(data: data, encoding: NSUTF8StringEncoding)
+        }
+        return nil
+    }
+    ///
+    /// 反序列化
+    ///
+    /// - parameter o: 解释后的数据(JSON/XML/...) \
+    ///                内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
+    /// - parameter T: 目标类型
+    /// - returns: 如果返回nil, 反序列化失败
+    ///
+    public static func deserialize<T>(o: AnyObject) -> T?  {
+        return _deserialize(o, T.self) as? T
+    }
+    ///
+    /// 反序列化
+    ///
+    /// - parameter o: 解释后的数据(JSON/XML/...) \
+    ///                内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
+    /// - parameter t: 目标类型
+    /// - returns: 如果返回nil, 反序列化失败
+    ///
+    public static func deserialize(o: AnyObject, _ t: Any.Type) -> Any? {
+        return _deserialize(o, t)
+    }
+    ///
+    /// 反序列化
+    ///
+    /// - parameter data: json原始数据(NSData)
+    /// - parameter T: 目标类型
+    /// - returns: 如果返回nil, 反序列化失败
+    ///
+    public static func deserialize<T>(JSONData data: NSData) throws -> T? {
+        return try deserialize(JSONData: data, T.self) as? T
+    }
+    ///
+    /// 反序列化
+    ///
+    /// - parameter data: json原始数据(NSData)
+    /// - parameter t: 目标类型
+    /// - returns: 如果返回nil, 反序列化失败
+    ///
+    public static func deserialize(JSONData data: NSData, _ t: Any.Type) throws -> Any? {
+        let json = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+        return _deserialize(json, t)
+    }
+    ///
+    /// 反序列化
+    ///
+    /// - parameter str: json字符串数据(NSString)
+    /// - parameter T: 目标类型
+    /// - returns: 如果返回nil, 反序列化失败
+    ///
+    public static func deserialize<T>(JSONString str: String) throws -> T? {
+        return try deserialize(JSONString: str, T.self) as? T
+    }
+    
+    ///
+    /// 反序列化
+    ///
+    /// - parameter str: json字符串数据(NSString)
+    /// - parameter t: 目标类型
+    /// - returns: 如果返回nil, 反序列化失败
+    ///
+    public static func deserialize(JSONString str: String, _ type: Any.Type) throws -> Any? {
+        guard let data = str.dataUsingEncoding(NSUTF8StringEncoding) else {
+            throw NSError(domain: "String decode fail", code: -1, userInfo: nil)
+        }
+        return try deserialize(JSONData: data, type)
+    }
+}
+
+// MARK: - Util Function
+
+///
+/// 赋值
+///
+public func assign<T>(inout o: T, _ i: Any?) {
+    // 检查`i`是否可以转换为`T`
+    if let i = i as? T {
+        // 转换成功
+        o = i
+    } else {
+        // 转换失败
+        // 如果`T`支持空值, 更新为空值, 否则忽略
+        if let t = T.self as? NilLiteralConvertible.Type {
+            // 一定可以转回去的, 所以可以强转
+            o = t.init(nilLiteral: ()) as! T
+        }
+    }
+}
+
+///
+/// 解包
+///
+public func unwraps(var v: Any) -> Any {
+    // 获取类型
+    var m = Mirror(reflecting: v)
+    // 这是可选?
+    while m.displayStyle == .Optional && m.children.count != 0 {
+        v = m.children.first!.value
+        m = Mirror(reflecting: v)
+    }
+    // 完成
+    return v
+}
+
 // MARK: - Private Function
 
 ///
@@ -195,165 +350,6 @@ func _deserialize(o: AnyObject, _ t: Any.Type) -> Any? {
     }
     // 失败.
     return nil
-}
-
-// MARK: - Util Function
-
-///
-/// 赋值
-///
-public func assign<T>(inout o: T, _ i: Any?) {
-    // 检查`i`是否可以转换为`T`
-    if let i = i as? T {
-        // 转换成功
-        o = i
-    } else {
-        // 转换失败
-        // 如果`T`支持空值, 更新为空值, 否则忽略
-        if let t = T.self as? NilLiteralConvertible.Type {
-            // 一定可以转回去的, 所以可以强转
-            o = t.init(nilLiteral: ()) as! T
-        }
-    }
-}
-
-///
-/// 解包
-///
-public func unwraps(var v: Any) -> Any {
-    // 获取类型
-    var m = Mirror(reflecting: v)
-    // 这是可选?
-    while m.displayStyle == .Optional && m.children.count != 0 {
-        v = m.children.first!.value
-        m = Mirror(reflecting: v)
-    }
-    // 完成
-    return v
-}
-
-// MARK: - Util JSON Function
-
-///
-/// 序列化
-///
-/// - parameter o: 需要序列化的对象
-/// - returns: 如果返回nil, 序列化失败 \
-///            内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
-///
-public func serialize(o: Any) -> AnyObject? {
-    return _serialize(o)
-}
-
-///
-/// 序列化(未实现)
-///
-/// - parameter o: 需要序列化的对象
-/// - parameter t: 指定对象的KEY
-/// - returns: 如果返回nil, 序列化失败 \
-///            内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
-///
-public func serialize(o: Any, _ t: Any.Type) -> AnyObject? {
-    return _serialize(o, t)
-}
-
-
-///
-/// 序列化为json(NSData)
-///
-/// - parameter o: 需要序列化的对象
-/// - returns: 如果返回nil, 序列化失败
-///
-public func serializeToJSONData(o: Any) throws -> NSData? {
-    if let json = _serialize(o) {
-        return try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions(rawValue: 0))
-    }
-    return nil
-}
-
-///
-/// 序列化为json(NSString)
-///
-/// - parameter o: 需要序列化的对象
-/// - returns: 如果返回nil, 序列化失败
-///
-public func serializeToJSONString(o: Any) throws -> String? {
-    if let data = try serializeToJSONData(o) {
-        return String(data: data, encoding: NSUTF8StringEncoding)
-    }
-    return nil
-}
-
-///
-/// 反序列化
-///
-/// - parameter o: 解释后的数据(JSON/XML/...) \
-///                内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
-/// - parameter T: 目标类型
-/// - returns: 如果返回nil, 反序列化失败
-///
-public func deserialize<T>(o: AnyObject) -> T?  {
-    return _deserialize(o, T.self) as? T
-}
-
-///
-/// 反序列化
-///
-/// - parameter o: 解释后的数据(JSON/XML/...) \
-///                内部类型: NSNull, NSNumber, NSString, NSArray, NSDictionary
-/// - parameter t: 目标类型
-/// - returns: 如果返回nil, 反序列化失败
-///
-public func deserialize(o: AnyObject, _ t: Any.Type) -> Any? {
-    return _deserialize(o, t)
-}
-
-///
-/// 反序列化
-///
-/// - parameter data: json原始数据(NSData)
-/// - parameter T: 目标类型
-/// - returns: 如果返回nil, 反序列化失败
-///
-public func deserialize<T>(JSONData data: NSData) throws -> T? {
-    return try deserialize(JSONData: data, T.self) as? T
-}
-
-///
-/// 反序列化
-///
-/// - parameter data: json原始数据(NSData)
-/// - parameter t: 目标类型
-/// - returns: 如果返回nil, 反序列化失败
-///
-public func deserialize(JSONData data: NSData, _ t: Any.Type) throws -> Any? {
-    let json = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-    return _deserialize(json, t)
-}
-
-///
-/// 反序列化
-///
-/// - parameter str: json字符串数据(NSString)
-/// - parameter T: 目标类型
-/// - returns: 如果返回nil, 反序列化失败
-///
-public func deserialize<T>(JSONString str: String) throws -> T? {
-    return try deserialize(JSONString: str, T.self) as? T
-}
-
-///
-/// 反序列化
-///
-/// - parameter str: json字符串数据(NSString)
-/// - parameter t: 目标类型
-/// - returns: 如果返回nil, 反序列化失败
-///
-public func deserialize(JSONString str: String, _ type: Any.Type) throws -> Any? {
-    guard let data = str.dataUsingEncoding(NSUTF8StringEncoding) else {
-        throw NSError(domain: "String decode fail", code: -1, userInfo: nil)
-    }
-    return try deserialize(JSONData: data, type)
 }
 
 // MARK: - Swift Buildt-in Template Extension
