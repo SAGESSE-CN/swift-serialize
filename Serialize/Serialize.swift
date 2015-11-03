@@ -240,6 +240,15 @@ public func unwraps(var v: Any) -> Any {
     return v
 }
 
+///
+/// 安全的下转
+/// 主要解决在继承时返回Self类型, 时的转换问题
+///
+public func downcast<T>(o: Any) -> T? {
+    return o as? T
+}
+
+
 // MARK: - Private Function
 
 ///
