@@ -798,7 +798,7 @@ extension String : Serializeable {
 
 // MARK: - OC Buildt-in Type Extension
 
-extension NSObject : Serializeable, Buildable {
+extension NSObject : Serializeable {
     ///
     /// 序列化
     ///
