@@ -31,9 +31,9 @@ Type                    | Description
 ## Usage
 * [X] **Use Source**
 * [X] **Use Framework**
-* [X] **Use Cocoapods**
+* [X] **Use CocoaPods**
 
-Cocoapods Podfile:
+CocoaPods Podfile:
 ```Shell
 platform :ios, '8.0'
 pod "swift-serialize"
