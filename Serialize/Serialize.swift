@@ -894,12 +894,6 @@ extension NSNull {
 
 extension NSNumber {
     ///
-    /// 序列化
-    ///
-    public override func serialize() -> AnyObject? {
-        return self
-    }
-    ///
     /// 反序列化, 提供一些转换
     ///
     public override class func deserialize(o: AnyObject) -> NSNumber? {
@@ -929,12 +923,6 @@ extension NSNumber {
 
 extension NSString {
     ///
-    /// 序列化
-    ///
-    public override func serialize() -> AnyObject? {
-        return self
-    }
-    ///
     /// 反序列化, 提供一些转换
     ///
     public override class func deserialize(o: AnyObject) -> NSString? {
@@ -956,7 +944,7 @@ extension NSSet {
     /// 序列化
     ///
     public override func serialize() -> AnyObject? {
-        return self.allObjects.serialize()
+        return self.allObjects
     }
     ///
     /// 反序列化, 提供一些转换
@@ -971,18 +959,6 @@ extension NSSet {
 
 extension NSArray {
     ///
-    /// 序列化
-    ///
-    public override func serialize() -> AnyObject? {
-        let arr = NSMutableArray()
-        forEach {
-            if let value = _serialize($0) {
-                arr.addObject(value)
-            }
-        }
-        return arr
-    }
-    ///
     /// 反序列化, 提供一些转换
     ///
     public override class func deserialize(o: AnyObject) -> NSArray? {
@@ -991,25 +967,6 @@ extension NSArray {
 }
 
 extension NSDictionary {
-    ///
-    /// 序列化
-    ///
-    public override func serialize() -> AnyObject? {
-        let dic = NSMutableDictionary()
-        forEach {
-            guard let tmp = _serialize($0) else {
-                return
-            }
-            guard let key = NSString.deserialize(tmp) else {
-                return
-            }
-            guard let value = _serialize($1) else {
-                return
-            }
-            dic[key] = value
-        }
-        return dic
-    }
     ///
     /// 反序列化, 提供一些转换
     ///
