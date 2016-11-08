@@ -1,4 +1,4 @@
-# Serialize (swift 2.0/2.1)
+# Serialize (swift 3.0)
 [![Platform](http://img.shields.io/badge/platform-ios-blue.svg?style=flat)](https://developer.apple.com/iphone/index.action)
 [![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat)](https://developer.apple.com/swift)
 [![Build Status](https://travis-ci.org/sagesse-cn/swift-serialize.svg?branch=master)](https://travis-ci.org/sagesse-cn/swift-serialize)
@@ -60,7 +60,7 @@ print(jsonString!)
 
 // deserialize
 let e2: Example? = Serialize.deserialize(json!)
-let e3: Example? = Serialize.deserialize(json!, Example.self) as? Example
+let e3: Example? = Serialize.deserialize(json as Any, Example.self) as? Example
 
 print(e1 == e2)
 print(e2 == e3)
