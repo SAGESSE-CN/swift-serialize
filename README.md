@@ -11,7 +11,7 @@
 
   
 
-## 建议在 Swift 4.0 使用JSONDecoder 和 JSONEncoder
+## 建议在 Swift 4.0 以及之后的版本中使用原生的 JSONDecoder 和 JSONEncoder
 
 
 
