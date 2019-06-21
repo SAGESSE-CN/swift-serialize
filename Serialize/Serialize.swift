@@ -11,23 +11,13 @@ import UIKit
 // Collection           支持, 自动推断元素
 // Dictionary           支持, 自动推断KV类型
 // Set                  支持, 自动推断元素(映射为数组)
-// Struct               支持, 需要实现`Serializeable`或者`Codeable`
-// Enum                 支持, 需要实现`Serializeable`或者`Codeable`
-// Class                支持, 自动推断类型, 部分需要实现`Serializeable`或者`Codeable`
+// Struct               支持, 需要实现`Serializeable`或者`ValueProvider`
+// Enum                 支持, 需要实现`Serializeable`或者`ValueProvider`
+// Class                支持, 自动推断类型, 部分需要实现`Serializeable`或者`ValueProvider`
 // Tuple                不支持, 原因: 无法映射(NSArray, NSDictionary), 无法序列化/反序列化(临时类型)
 
 
 // MARK: - Public Protocol
-
-///
-/// 构建协议
-///
-public protocol Buildable {
-    ///
-    ///  允许其直接创建对象
-    ///
-    init()
-}
 
 ///
 /// 序列化/反序列化协议
@@ -52,9 +42,19 @@ public protocol Serializeable {
 }
 
 ///
+/// 构建协议
+///
+public protocol InitProvider {
+    ///
+    ///  允许其直接创建对象
+    ///
+    init()
+}
+
+///
 /// 键值编码
 ///
-public protocol Codeable {
+public protocol ValueProvider {
     ///
     /// 序列化/反序列化的时候获取值(暂时未使用, 因为可以直接获取到值)
     ///
@@ -64,7 +64,7 @@ public protocol Codeable {
     /// - parameter value: 新的值
     /// - note: example
     /// ```swift
-    /// struct Example : Codeable, Buildable {
+    /// struct Example : ValueProvider, InitProvider {
     ///     init() {}
     ///     var value1: Int = 0
     ///     var value2: String = ""
@@ -245,7 +245,7 @@ public func unwraps(_ v: Any) -> Any {
 /// 安全的下转
 /// 主要解决在继承时返回Self类型, 时的转换问题
 ///
-public func downcast<T>(o: Any) -> T? {
+public func downcast<T>(_ o: Any) -> T? {
     return o as? T
 }
 
@@ -330,8 +330,8 @@ func _deserialize(_ o: Any, _ t: Any.Type) -> Any? {
         // 直接让他自己去处理
         return t.deserialize(o)
     }
-    // 如果支持Codeable和Buildable(必须的否则无法创建对象), 由库处理
-    if let t = t as? (Buildable & Codeable.Type) {
+    // 如果支持ValueProvider和InitProvider(必须的否则无法创建对象), 由库处理
+    if let t = t as? (InitProvider & ValueProvider).Type {
         // 只处理NSDictionary的
         guard let dic = o as? NSDictionary, dic.count != 0 else {
             return nil
@@ -809,7 +809,7 @@ extension NSObject : Serializeable {
     ///
     /// - returns: 序列化为NSDictionary, 出错则为空
     ///
-    public func serialize() -> Any? {
+    @objc open func serialize() -> Any? {
         // 序列化的结果是NSDictionary
         let dic = NSMutableDictionary()
         // 反射
@@ -836,7 +836,7 @@ extension NSObject : Serializeable {
     ///
     /// - parameter o: 只支持NSDictionary
     ///
-    public class func deserialize(_ o: Any) -> Self? {
+    @objc open class func deserialize(_ o: Any) -> Self? {
         // 只处理NSDictionary的
         guard let dic = o as? NSDictionary, dic.count != 0 else {
             return nil
@@ -873,8 +873,8 @@ extension NSObject : Serializeable {
                     }
                 } else {
                     // 原生不支持(例如: Enum, Struct, Tuple, Optional).
-                    // 检查是否可以使用`Codeable`协议
-                    if var tmp = tmp as? Codeable {
+                    // 检查是否可以使用`ValueProvider`协议
+                    if var tmp = tmp as? ValueProvider {
                         tmp.setValue(r, forSerialize: k)
                     }
                 }
@@ -890,13 +890,13 @@ extension NSNull {
     ///
     /// 序列化
     ///
-    public override func serialize() -> Any? {
+    @objc open override func serialize() -> Any? {
         return nil
     }
     ///
     /// 反序列化, 提供一些转换
     ///
-    public override class func deserialize(_ o: Any) -> NSNull? {
+    @objc open override class func deserialize(_ o: Any) -> Self? {
         return nil
     }
 }
@@ -905,10 +905,10 @@ extension NSNumber {
     ///
     /// 反序列化, 提供一些转换
     ///
-    public override class func deserialize(_ o: Any) -> NSNumber? {
+    @objc open override class func deserialize(_ o: Any) -> Self? {
         // 是number
         if let number = o as? NSNumber {
-            return number
+            return unsafeDowncast(number, to: self)
         }
         // 是string
         if let str = o as? NSString {
@@ -923,7 +923,9 @@ extension NSNumber {
             // 可能要指定一些格式
             let nf = NumberFormatter()
             // 使用转换器直接转换
-            return nf.number(from: str as String)
+            return nf.number(from: str as String).map {
+                return unsafeDowncast($0, to: self)
+            }
         }
         // 未知
         return nil
@@ -934,14 +936,14 @@ extension NSString {
     ///
     /// 反序列化, 提供一些转换
     ///
-    public override class func deserialize(_ o: Any) -> NSString? {
+    @objc open override class func deserialize(_ o: Any) -> Self? {
         // 是string
         if let str = o as? NSString {
-            return str
+            return unsafeDowncast(str, to: self)
         }
         // 是number
         if let number = o as? NSNumber {
-            return number.stringValue as NSString
+            return unsafeDowncast(number.stringValue as NSString, to: self)
         }
         // 未知
         return nil
@@ -952,15 +954,16 @@ extension NSSet {
     ///
     /// 序列化
     ///
-    public override func serialize() -> Any? {
+    @objc open override func serialize() -> Any? {
         return self.allObjects
     }
     ///
     /// 反序列化, 提供一些转换
     ///
-    public override class func deserialize(_ o: Any) -> NSSet? {
+    @objc open override class func deserialize(_ o: Any) -> Self? {
         if let arr = o as? NSArray {
-            return NSSet(array: arr as [AnyObject])
+            let set = NSSet(array: arr as [AnyObject])
+            return unsafeDowncast(set, to: self)
         }
         return nil
     }
@@ -970,8 +973,10 @@ extension NSArray {
     ///
     /// 反序列化, 提供一些转换
     ///
-    public override class func deserialize(_ o: Any) -> NSArray? {
-        return o as? NSArray
+    @objc open override class func deserialize(_ o: Any) -> Self? {
+        return (o as? NSArray).map {
+            return unsafeDowncast($0, to: self)
+        }
     }
 }
 
@@ -979,8 +984,10 @@ extension NSDictionary {
     ///
     /// 反序列化, 提供一些转换
     ///
-    public override class func deserialize(_ o: Any) -> NSDictionary? {
-        return o as? NSDictionary
+    @objc open override class func deserialize(_ o: Any) -> Self? {
+        return (o as? NSDictionary).map {
+            return unsafeDowncast($0, to: self)
+        }
     }
 }
 
@@ -988,15 +995,17 @@ extension NSURL {
     ///
     /// 序列化
     ///
-    public override func serialize() -> Any? {
+    @objc open override func serialize() -> Any? {
         return self.absoluteString
     }
     ///
     /// 反序列化, 提供一些转换
     ///
-    public override class func deserialize(_ o: Any) -> NSURL? {
+    @objc open override class func deserialize(_ o: Any) -> Self? {
         if let str = NSString.deserialize(o) {
-            return NSURL(string: str as String)
+            return NSURL(string: str as String).map {
+                return unsafeDowncast($0, to: self)
+            }
         }
         return nil
     }
@@ -1006,7 +1015,7 @@ extension NSDate {
     ///
     /// 序列化 => 日期 => NSString
     ///
-    public override func serialize() -> Any? {
+    @objc open override func serialize() -> Any? {
         // 可能需要更多格式
         let df = DateFormatter()
         //
@@ -1018,7 +1027,7 @@ extension NSDate {
     ///
     /// 反序列化 <= 时间戳/日期 <= NSString
     ///
-    public override class func deserialize(_ o: Any) -> NSDate? {
+    @objc open override class func deserialize(_ o: Any) -> Self? {
         // 字符串
         if let str = o as? NSString {
             // 可能需要更多格式
@@ -1027,12 +1036,14 @@ extension NSDate {
             df.dateStyle = .medium
             df.timeStyle = .medium
             // 格式化
-            return df.date(from: str as String) as NSDate?
+            return df.date(from: str as String).map {
+                return unsafeDowncast($0 as NSDate, to: self)
+            }
         }
         // 数字
         if let number = o as? NSNumber {
             // 直接认为是时间戳
-            return NSDate(timeIntervalSince1970: number.doubleValue)
+            return unsafeDowncast(NSDate(timeIntervalSince1970: number.doubleValue), to: self)
         }
         // 其他都失败
         return nil
@@ -1045,7 +1056,7 @@ extension NSData {
     ///
     /// - returns: base64转换为NSString, 任意步骤失败结果为nil
     ///
-    public override func serialize() -> Any? {
+    @objc open override func serialize() -> Any? {
         // 直接base编码
         return base64EncodedString()
     }
@@ -1055,11 +1066,13 @@ extension NSData {
     /// - parameter o: 只支持NSString
     /// - returns: 如果`o`是base64编码的字符串, 对其反序列化, 否则为nil
     ///
-    public override class func deserialize(_ o: Any) -> NSData? {
+    @objc open override class func deserialize(_ o: Any) -> Self? {
         // 这是字符串
         if let str = o as? NSString {
             // 直接解码
-            return NSData(base64Encoded: str as String)
+            return NSData(base64Encoded: str as String).map {
+                return unsafeDowncast($0, to: self)
+            }
         }
         return nil
     }
@@ -1093,9 +1106,9 @@ extension UIImage {
     ///
     /// - returns: 先序列化为Data(PNG), 然后再base64转换为NSString, 任意步骤失败结果为nil
     ///
-    public override func serialize() -> Any? {
+    @objc open override func serialize() -> Any? {
         // 直接压缩传输
-        return UIImagePNGRepresentation(self).serialize()
+        return self.pngData().serialize()
     }
     ///
     /// 反序列化
@@ -1103,9 +1116,11 @@ extension UIImage {
     /// - parameter o: 只支持NSString
     /// - returns: 如果`o`是base64编码的字符串, 对其反序列化, 否则为nil
     ///
-    public override class func deserialize(_ o: Any) -> UIImage? {
+    @objc open override class func deserialize(_ o: Any) -> Self? {
         if let data = NSData.deserialize(o) {
-            return UIImage(data: data as Data)
+            return UIImage(data: data as Data).map {
+                return unsafeDowncast($0, to: self)
+            }
         }
         return nil
     }
@@ -1118,7 +1133,7 @@ extension URL: Serializeable {
         return (self as NSURL).serialize()
     }
     public static func deserialize(_ o: Any) -> URL? {
-        return NSURL.deserialize(o) as? URL
+        return NSURL.deserialize(o) as URL?
     }
 }
 extension Date: Serializeable {
@@ -1126,7 +1141,7 @@ extension Date: Serializeable {
         return (self as NSDate).serialize()
     }
     public static func deserialize(_ o: Any) -> Date? {
-        return NSDate.deserialize(o) as? Date
+        return NSDate.deserialize(o) as Date?
     }
 }
 extension Data: Serializeable {
@@ -1134,6 +1149,6 @@ extension Data: Serializeable {
         return (self as NSData).serialize()
     }
     public static func deserialize(_ o: Any) -> Data? {
-        return NSData.deserialize(o) as? Data
+        return NSData.deserialize(o) as Data?
     }
 }

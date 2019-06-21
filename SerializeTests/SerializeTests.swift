@@ -103,10 +103,11 @@ class T1 : NSObject
     @objc var t_atooset: Optional<Set<Int>> = .none
     
     @objc var t_dtot2: T2?
-          var t_dtot3: T2.T3?
+    @objc var t_dtot3: T2.T3?
 }
 
 class T2 : NSObject {
+    
     @objc var t_m : Double = 0
     
     class T3 : NSObject {
@@ -115,20 +116,20 @@ class T2 : NSObject {
 }
 
 class T4 : NSObject {
-    var i : Int = 0
-    var f : Float = 0
-    var s : String = ""
+    @objc var i : Int = 0
+    @objc var f : Float = 0
+    @objc var s : String = ""
     var oi : Int?
     var of : Float?
-    var os : String?
-    var a : [String] = []
-    var oa : [Int]?
-    var t3 : T2.T3?
-    var d : [Int:Int] = [:]
-    var od : [Int:Int]?
-    var odn : [Int:Int]?
+    @objc var os : String?
+    @objc var a : [String] = []
+    @objc var oa : [Int]?
+    @objc var t3 : T2.T3?
+    @objc var d : [Int:Int] = [:]
+    @objc var od : [Int:Int]?
+    @objc var odn : [Int:Int]?
     
-    var set = Set<Int>()
+    @objc var set = Set<Int>()
 }
 
 struct s1 {
@@ -153,7 +154,7 @@ class Test : NSObject {
     // var es = ES.S1 // 错误 !!会发生异常
 }
 
-class SE1 : Buildable, Codeable {
+class SE1 : InitProvider, ValueProvider {
     
     var a: Optional<Int> = nil
     var b: Optional<String> = nil
@@ -190,7 +191,7 @@ func ==(lhs: SE1, rhs: SE1) -> Bool {
     return lhs.hashValue == rhs.hashValue
 }
 
-class SE2 : Buildable, Codeable {
+class SE2 : InitProvider, ValueProvider {
     
     var a: Optional<Int> = nil
     var b: Optional<String> = nil
@@ -218,7 +219,7 @@ class SE2 : Buildable, Codeable {
     }
 }
 
-class SE3<T> : Buildable, Codeable {
+class SE3<T> : InitProvider, ValueProvider {
     
     var a: Optional<Int> = nil
     var b: Optional<String> = nil
@@ -248,7 +249,7 @@ class SE3<T> : Buildable, Codeable {
 
 class SerializeTests: XCTestCase {
     
-    class E1 : NSObject, Codeable {
+    class E1 : NSObject, ValueProvider {
               var a: Optional<Int> = nil
         @objc var b: Optional<String> = nil
         @objc var c: Optional<Array<Int>> = nil
@@ -574,7 +575,7 @@ class SerializeTests: XCTestCase {
     }
     
     func testSwiftKVC() {
-        struct D : Codeable {
+        struct D : ValueProvider {
             var i1: Int = 0
             var i2: Int = 0
             var i3: Int = 0
@@ -626,7 +627,7 @@ class SerializeTests: XCTestCase {
         
         XCTAssert(d.i1 == 1)
         XCTAssert(d.i2 == 1)
-        XCTAssert(d.i3 == 0)
+        XCTAssert(d.i3 == 1)
         XCTAssert(d.i4 == 1)
         XCTAssert(d.i5 == 1)
         XCTAssert(d.i6 == 1)
@@ -647,7 +648,7 @@ class SerializeTests: XCTestCase {
         // UIImage
         // CGFloat
         
-        let s = NSSet.deserialize([1,2,3])
+        let s = NSSet.deserialize([1,2,3]) as? NSSet
         
         XCTAssert(s != nil)
         XCTAssert(s == NSSet(array: [1,2,3]))
@@ -760,7 +761,7 @@ class SerializeTests: XCTestCase {
         // 序列化结果应为[1,2], 类型应为NSArray
         XCTAssert(si != nil, "serialize fail")
         XCTAssert(si! is NSArray, "type error")
-        XCTAssertEqual(si as? NSArray, [2,1], "value error")
+        XCTAssertEqual((si as? [Int])?.sorted(), [1,2], "value error")
         
         let sn = Set<Int>().serialize()
         // 序列化结果应为NSArray
@@ -966,12 +967,12 @@ class SerializeTests: XCTestCase {
         class Example : NSObject {
             
             // base type
-            var val_int: Int = 0
-            var val_bool: Bool = false
-            var val_double: Double = 0
-            var val_string: String?
-            var val_array: [Int] = []
-            var val_dictionary: [Int:Int] = [:]
+            @objc var val_int: Int = 0
+            @objc var val_bool: Bool = false
+            @objc var val_double: Double = 0
+            @objc var val_string: String?
+            @objc var val_array: [Int] = []
+            @objc var val_dictionary: [Int:Int] = [:]
             
             // invalid type
             //var val_int_invalid: Int?
@@ -981,9 +982,9 @@ class SerializeTests: XCTestCase {
             //var val_dictionary_invalid: [Int:Int?]
             
             // custom type
-            var val_custom: Custom?
-            var val_custom_array: [Custom]?
-            var val_custom_dictionary: [String:Custom]?
+            @objc var val_custom: Custom?
+            @objc var val_custom_array: [Custom]?
+            @objc var val_custom_dictionary: [String:Custom]?
             
             class Custom : NSObject {
                 var val: Example?

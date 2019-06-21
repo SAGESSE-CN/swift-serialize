@@ -1,21 +1,30 @@
-# Serialize (swift 3.0)
+# Serialize (swift 5.0)
+
 [![Platform](http://img.shields.io/badge/platform-ios-blue.svg?style=flat)](https://developer.apple.com/iphone/index.action)
 [![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat)](https://developer.apple.com/swift)
 [![Build Status](https://travis-ci.org/sagesse-cn/swift-serialize.svg?branch=master)](https://travis-ci.org/sagesse-cn/swift-serialize)
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](http://mit-license.org)
 
 * serialize swift object to json
+
 * deserialize json for swift custom class
 
+  
+
+## 建议在 Swift 4.0 使用JSONDecoder 和 JSONEncoder
+
+
+
 ### Serialize Support
+
 AnyObject (Most)
 
 ### Deserialize Support
 Type                    | Description
 ----------------------- | -----------------------------------------------
-**Class**               | 支持, 自动推断类型, 部分需要实现`Serializeable`或者`Codeable`
-**Enum**                | 支持, 需要实现`Serializeable`或者`Codeable`
-**Struct**              | 支持, 需要实现`Serializeable`或者`Codeable`
+**Class**               | 支持, 自动推断类型, 部分需要实现`Serializeable`或者`ValueProvider`
+**Enum**                | 支持, 需要实现`Serializeable`或者`ValueProvider`
+**Struct**              | 支持, 需要实现`Serializeable`或者`ValueProvider`
 **Tuple**               | 不支持, 无法序列化/反序列化(临时类型), 无法映射(NSArray, NSDictionary)
 **Optional**            | 支持, 自动推断元素
 **Collection**          | 支持, 自动推断元素
@@ -68,18 +77,18 @@ print(e2 == e3)
 
 ## 如何让struct/class支持Serialize
 
-#### 方法1: 使用`Codeable`
+#### 方法1: 使用`ValueProvider`
 
-`Codeable`需要实现`setValue:forSerialize:`和`valueForSerialize:`方法.
+`ValueProvider`需要实现`setValue:forSerialize:`和`valueForSerialize:`方法.
 
-`Buildable`只在反序列化的时候使用, 如果你不需要反序列化可以跳过.
+`InitProvider`只在反序列化的时候使用, 如果你不需要反序列化可以跳过.
 
 序列化: 将直接获取成员因此并没有调用`valueForSerialize:`, 该函数作为保留函数.
 
 反序列化: 将使用`setValue:forSerialize:`, 需要在方法里对每一个成员进行更新, 可以使用`assign`简化类型转换的代码
 
 ```swift
-class Example : Buildable, Codeable {
+class Example : InitProvider, ValueProvider {
     var a: Optional<Int> = nil
     var b: Optional<String> = nil
     var c: Optional<Array<Int>> = nil
@@ -159,18 +168,18 @@ class Example : Serializeable {
 
 大部分情况下都可以直接用系统的KVC(NSKeyValueCoding), 但也有一些情况是没有办法使用系统的KVC的.
 
-你可以使用`@objc`来检查是否原生支持, 对于那些没有支持的, 你需要实现`Codeable`
+你可以使用`@objc`来检查是否原生支持, 对于那些没有支持的, 你需要实现`ValueProvider`
 
 ```swift
-class Example : NSObject, Codeable {
+class Example : NSObject, ValueProvider {
 
     // base type
-    var val_int: Int = 0
-    var val_bool: Bool = false
-    var val_double: Double = 0
-    var val_string: String?
-    var val_array: [Int] = []
-    var val_dictionary: [Int:Int] = [:]
+    @objc var val_int: Int = 0
+    @objc var val_bool: Bool = false
+    @objc var val_double: Double = 0
+    @objc var val_string: String?
+    @objc var val_array: [Int] = []
+    @objc var val_dictionary: [Int:Int] = [:]
 
     // 原生KVC不支持的类型
     var val_int_t: Int?
@@ -180,9 +189,9 @@ class Example : NSObject, Codeable {
     var val_dictionary_t: [Int:Int?]
 
     // custom type
-    var val_custom: Custom?
-    var val_custom_array: [Custom]?
-    var val_custom_dictionary: [String:Custom]?
+    @objc var val_custom: Custom?
+    @objc var val_custom_array: [Custom]?
+    @objc var val_custom_dictionary: [String:Custom]?
 
     class Custom : NSObject {
         var val: Example?
